@@ -1,0 +1,24 @@
+/* =============================================
+   HomeButton.css  –  CGS
+   Exact copy of akuastrono HomeButton.css
+   Brand color: CGS green
+   ============================================= */
+
+.chat-icon {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  width: 50px;
+  height: 50px;
+  background-color: #2e6b3e;
+  z-index: 9999999;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.chat-icon svg {
+  width: 50px;
+  height: 50px;
+  color: white;
+  padding: 10px;
+}

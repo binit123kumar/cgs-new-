@@ -1,0 +1,778 @@
+/* =========================================================
+   SCHOOL OF GEOGRAPHY
+   HEADER + NAVBAR + HERO SECTION
+   ========================================================= */
+
+
+/* =========================================================
+   GOOGLE FONTS
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap');
+
+
+/* =========================================================
+   ROOT VARIABLES
+   ========================================================= */
+
+:root {
+  --green: #0d401f;
+  --green2: #166b32;
+  --lime: #b8d33a;
+  --ink: #17321f;
+  --muted: #66706a;
+}
+
+
+/* =========================================================
+   GLOBAL BOX SIZING
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   MAIN HEADER
+   ========================================================= */
+
+.site-header {
+  font-family: Inter, Arial, sans-serif;
+  background: #fff;
+  color: var(--ink);
+}
+
+
+/* Main content width */
+
+.header-container {
+  width: min(1180px, 92%);
+  margin: 0 auto;
+}
+
+
+/* =========================================================
+   TOP GREEN STRIP
+   Email / Phone / Student Login / Faculty Login / Social
+   ========================================================= */
+
+.top-strip {
+  height: 36px;
+  background: #063116;
+  color: #fff;
+  font-size: 13px;
+}
+
+
+/* Top strip inner */
+
+.top-strip-inner {
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+/* Top contact */
+
+.top-contact,
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+
+/* Contact icons */
+
+.top-contact svg {
+  font-size: 12px;
+}
+
+
+/* Email text — distinct legible font */
+
+.top-email {
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+  letter-spacing: 0.2px;
+  font-weight: 400;
+}
+
+
+/* Divider */
+
+.top-divider {
+  height: 15px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+
+/* Top links */
+
+.top-actions a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+
+/* Social icons */
+
+.top-actions > a:not(:nth-of-type(-n+2)) {
+  display: grid;
+  place-items: center;
+  width: 21px;
+  height: 21px;
+  background: #f6f8f4;
+  color: #0b4b23;
+  border-radius: 50%;
+  font-size: 10px;
+}
+
+
+/* Social separator */
+
+.social-sep {
+  height: 18px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.35);
+  margin-left: 5px;
+}
+
+
+/* =========================================================
+   UNIVERSITY / SCHOOL BRAND HEADER
+   ========================================================= */
+
+.brand-row {
+  background: #fff;
+}
+
+
+/* Brand layout */
+
+.brand-inner {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 clamp(16px, 4vw, 60px);
+  min-height: 91px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 10px;
+}
+
+
+/* University brand */
+
+.university-brand,
+.school-brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+
+/* University logo spacing */
+
+.university-brand {
+  gap: 12px;
+}
+
+
+/* AKU emblem */
+
+.aku-emblem {
+  width: 50px;
+  height: 50px;
+  border: 2px solid #9b9b8d;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  font-weight: 800;
+  color: #725e2e;
+  background: radial-gradient(circle, #fff 52%, #e6e3d2 53%);
+}
+
+
+/* AKU emblem — uploaded logo image */
+
+.aku-emblem-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+
+/* University name */
+
+.university-brand strong {
+  display: block;
+  font-size: 18px;
+}
+
+
+/* University location */
+
+.university-brand span {
+  display: block;
+  font-size: 15px;
+  margin-top: 2px;
+}
+
+
+/* School brand */
+
+.school-brand {
+  justify-content: center;
+  gap: 10px;
+}
+
+
+/* =========================================================
+   DATABASE SCHOOL LOGO
+   Logo loaded from SiteSettings.LogoPath
+   ========================================================= */
+
+.database-school-logo {
+  width: 65px;
+  height: 65px;
+  object-fit: contain;
+  display: block;
+  flex: 0 0 65px;
+  border-radius: 4px;
+}
+
+
+/* Globe */
+
+.globe-mark {
+  font-size: 38px;
+  filter: saturate(0.75);
+}
+
+
+/* School title */
+
+.school-title {
+  font-size: 30px;
+  line-height: 25px;
+  letter-spacing: 0.5px;
+  color: #0b5525;
+}
+
+
+/* Geography second line */
+
+.school-title span {
+  font-size: 23px;
+  display: block;
+  letter-spacing: 1px;
+  color: #2b3830;
+}
+
+
+/* School tagline */
+
+.school-brand small {
+  font-size: 12px;
+  color: #56605a;
+  display: block;
+  margin-top: 8px;
+}
+
+
+/* =========================================================
+   SEARCH BOX (lives inside the main navbar)
+   ========================================================= */
+
+.header-search {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid transparent;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  margin-left: auto;
+  align-self: center;
+}
+
+.header-search.focused {
+  border-color: #d4af37;
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.35);
+}
+
+
+/* Search input */
+
+.header-search input {
+  width: 160px;
+  height: 32px;
+  border: 0;
+  padding: 0 10px;
+  font-size: 13px;
+  color: #222;
+}
+
+.header-search input:focus {
+  outline: none;
+}
+
+
+/* Clear (x) button */
+
+.header-search-clear {
+  width: 28px;
+  height: 32px;
+  border: 0;
+  background: #fff;
+  color: #888;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.header-search-clear:hover {
+  color: #c0392b;
+}
+
+
+/* Search submit button */
+
+.header-search-submit {
+  width: 36px;
+  height: 32px;
+  border: 0;
+  background: #0d3c1e;
+  color: #fff;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.header-search-submit:hover {
+  background: #166b32;
+}
+
+
+/* =========================================================
+   MAIN NAVIGATION BAR
+   HOME / ABOUT / ACADEMICS / FACULTY / RESEARCH / ETC.
+   ========================================================= */
+
+.main-nav {
+  background: #062d16;
+  color: #fff;
+  position: relative;
+  z-index: 20;
+  box-shadow: 0 2px 5px #0002;
+}
+
+
+/* Navigation container */
+
+.nav-inner {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  overflow: visible;
+}
+
+
+/* =========================================================
+   NAVIGATION MENU TEXT
+   Main change: 10px → 15px
+   ========================================================= */
+
+.nav-link {
+  height: 40px;
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  background: none;
+  color: #fff;
+  text-decoration: none;
+
+  /* MAIN NAV FONT SIZE */
+  font-size: 15px;
+
+  font-weight: 700;
+  white-space: nowrap;
+  position: relative;
+  cursor: pointer;
+}
+
+
+/* Navigation hover */
+
+.nav-link:hover,
+.nav-link.active,
+.nav-menu-button.menu-open {
+  background: #0d4b23;
+}
+
+
+/* Active navigation underline */
+
+.nav-link.active::after {
+  content: "";
+  height: 2px;
+  background: #c6d83c;
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 0;
+}
+
+
+/* Dropdown arrow */
+
+.nav-menu-button svg {
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   DROPDOWN MENU
+   ========================================================= */
+
+.nav-menu {
+  position: relative;
+}
+
+
+/* Dropdown container */
+
+.dropdown-panel {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  min-width: 230px;
+  background: #fff;
+  border: 1px solid #e0e4e0;
+  box-shadow: 0 10px 25px #0002;
+}
+
+
+/* Dropdown links */
+
+.dropdown-panel a {
+  display: block;
+  color: #17321f;
+  text-decoration: none;
+
+  /* Dropdown font */
+  font-size: 15px;
+
+  padding: 12px 15px;
+}
+
+
+/* Dropdown hover */
+
+.dropdown-panel a:hover {
+  background: #f1f5f1;
+  color: #0d4b23;
+}
+
+
+/* =========================================================
+   HERO SECTION
+   ========================================================= */
+
+.geo-hero {
+  height: 350px;
+  position: relative;
+
+  /* Hero image comes from React via --hero-image */
+  background-image: var(
+    --hero-image,
+    url('https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1900&q=85')
+  );
+
+  background-position: center 56%;
+  background-size: cover;
+
+  color: #fff;
+  overflow: hidden;
+}
+
+
+/* Hero dark overlay */
+
+.geo-hero-overlay {
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(3, 35, 17, 0.85),
+      rgba(3, 35, 17, 0.35) 55%,
+      rgba(0, 0, 0, 0.08)
+    );
+}
+
+
+/* Hero content */
+
+.geo-hero-content {
+  position: relative;
+  padding-top: 50px;
+}
+
+
+/* Welcome text */
+
+.hero-kicker {
+  font-size: 15px;
+  letter-spacing: 4px;
+  color: #d3df3c;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+
+/* Hero main heading */
+
+.geo-hero h1 {
+  font-family: "Playfair Display", serif;
+  font-size: 44px;
+  line-height: 1.05;
+  margin: 0 0 16px;
+}
+
+
+/* Hero description */
+
+.geo-hero p {
+  max-width: 430px;
+  font-size: 15px;
+  line-height: 1.75;
+  margin: 0 0 16px;
+}
+
+
+/* =========================================================
+   HERO BUTTONS
+   ========================================================= */
+
+.hero-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+
+/* Hero buttons */
+
+.hero-primary,
+.hero-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  padding: 10px 15px;
+  border-radius: 3px;
+  text-decoration: none;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+
+/* Primary button */
+
+.hero-primary {
+  background: #14662f;
+  border: 1px solid #b7d233;
+}
+
+
+/* Secondary button */
+
+.hero-secondary {
+  border: 1px solid #dfe8e0;
+  background: #123a22aa;
+}
+
+
+/* Hero button arrow */
+
+.hero-buttons span {
+  font-size: 18px;
+  line-height: 10px;
+}
+
+
+/* =========================================================
+   HERO SLIDER DOTS
+   ========================================================= */
+
+.hero-dots {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+}
+
+
+/* Slider dot */
+
+.hero-dots span {
+  width: 10px;
+  height: 10px;
+  border: 1px solid #fff;
+  border-radius: 50%;
+}
+
+
+/* Selected dot */
+
+.hero-dots .selected {
+  background: #fff;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1050px) {
+
+  .nav-link {
+    padding: 0 10px;
+    font-size: 14px;
+  }
+
+  .brand-inner {
+    grid-template-columns: 1fr 1.3fr;
+  }
+
+  .header-search {
+    display: none;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 760px) {
+
+  /* Top strip */
+  .top-strip {
+    height: auto;
+    padding: 8px 0;
+  }
+
+
+  /* Top content */
+  .top-strip-inner,
+  .top-actions {
+    flex-wrap: wrap;
+  }
+
+
+  /* Hide social icons on mobile */
+  .top-actions > a:not(:nth-of-type(-n+2)),
+  .social-sep {
+    display: none;
+  }
+
+
+  /* Brand */
+  .brand-inner {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 12px 0;
+    gap: 10px;
+  }
+
+
+  /* Hide university brand */
+  .university-brand {
+    display: none;
+  }
+
+
+  /* School brand */
+  .school-brand {
+    order: 0;
+  }
+
+  /* Database logo on mobile */
+  .database-school-logo {
+    width: 55px;
+    height: 55px;
+    flex-basis: 55px;
+  }
+
+
+  /* Horizontal navbar scroll */
+  .main-nav {
+    overflow-x: auto;
+  }
+
+
+  .nav-inner {
+    width: max-content;
+    margin: 0 auto;
+  }
+
+
+  /* Mobile navigation */
+  .nav-link {
+    height: 45px;
+    padding: 0 13px;
+    font-size: 14px;
+  }
+
+
+  /* Mobile dropdown */
+  .dropdown-panel {
+    top: 45px;
+  }
+
+
+  /* Hero */
+  .geo-hero {
+    height: 390px;
+  }
+
+
+  .geo-hero-content {
+    padding-top: 65px;
+  }
+
+
+  .geo-hero h1 {
+    font-size: 38px;
+  }
+
+
+  .geo-hero p {
+    max-width: 350px;
+    font-size: 15px;
+  }
+
+
+  /* Hero buttons */
+  .hero-primary,
+  .hero-secondary {
+    font-size: 13px;
+  }
+}

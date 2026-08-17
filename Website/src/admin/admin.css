@@ -1,0 +1,96 @@
+.cgs-admin-scope {
+  --navy: #101c40;
+  --navy-light: #182b5c;
+  --navy-lighter: #22346b;
+  --accent: #2f6fed;
+  --accent-dark: #1d54c4;
+  --bg: #f2f4f9;
+  --card: #ffffff;
+  --text: #1f2430;
+  --text-muted: #7a8194;
+  --border: #e6e9f2;
+  --success: #16a34a;
+  --success-bg: #e8f9ef;
+  --danger: #e5484d;
+  --danger-bg: #fdecec;
+  --warning: #f59e0b;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 2px rgba(16, 28, 64, 0.06), 0 4px 16px rgba(16, 28, 64, 0.05);
+}.cgs-admin-scope * { box-sizing: border-box; }.cgs-admin-scope html, .cgs-admin-scope body, .cgs-admin-scope #root { height: 100%; }.cgs-admin-scope body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}.cgs-admin-scope a { text-decoration: none; color: inherit; }.cgs-admin-scope button { font-family: inherit; cursor: pointer; }.cgs-admin-scope input, .cgs-admin-scope textarea, .cgs-admin-scope select { font-family: inherit; }.cgs-admin-scope::-webkit-scrollbar { width: 8px; height: 8px; }.cgs-admin-scope::-webkit-scrollbar-thumb { background: #c7cee0; border-radius: 8px; }.cgs-admin-scope /* ---------- Layout ---------- */
+.app-shell { display: flex; min-height: 100vh; }.cgs-admin-scope .sidebar {
+  width: 250px;
+  flex-shrink: 0;
+  background: var(--navy);
+  color: #cfd6ea;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}.cgs-admin-scope .sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}.cgs-admin-scope .sidebar-brand .logo-badge {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent), #7c3aed);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; color: white; font-size: 15px;
+}.cgs-admin-scope .sidebar-brand span { font-weight: 700; font-size: 15px; color: white; letter-spacing: .3px; }.cgs-admin-scope .sidebar-nav { padding: 12px 10px; flex: 1; }.cgs-admin-scope .sidebar-link {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 12px; border-radius: var(--radius-sm);
+  font-size: 13.5px; font-weight: 500; color: #aab3cc;
+  margin-bottom: 2px; transition: background .15s, color .15s;
+}.cgs-admin-scope .sidebar-link i { font-size: 16px; width: 18px; text-align: center; }.cgs-admin-scope .sidebar-link:hover { background: var(--navy-light); color: white; }.cgs-admin-scope .sidebar-link.active { background: var(--accent); color: white; }.cgs-admin-scope .main-col { flex: 1; min-width: 0; display: flex; flex-direction: column; }.cgs-admin-scope .topbar {
+  height: 64px; background: white; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px; position: sticky; top: 0; z-index: 5;
+}.cgs-admin-scope .topbar-search {
+  flex: 1; max-width: 380px; display: flex; align-items: center; gap: 8px;
+  background: var(--bg); border-radius: 999px; padding: 8px 16px; color: var(--text-muted); font-size: 13.5px;
+}.cgs-admin-scope .topbar-right { display: flex; align-items: center; gap: 18px; }.cgs-admin-scope .avatar-circle {
+  width: 36px; height: 36px; border-radius: 50%; background: var(--navy);
+  color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px;
+}.cgs-admin-scope .page-content { padding: 24px; flex: 1; }.cgs-admin-scope .breadcrumb-row { font-size: 13px; color: var(--text-muted); margin-bottom: 4px; }.cgs-admin-scope .page-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }.cgs-admin-scope .page-title-row h1 { font-size: 21px; font-weight: 700; margin: 0; }.cgs-admin-scope /* ---------- Cards (dashboard) ---------- */
+.dash-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px;
+}.cgs-admin-scope .dash-card {
+  background: var(--card); border-radius: var(--radius); padding: 18px 20px;
+  box-shadow: var(--shadow); border: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 12px; transition: transform .15s;
+}.cgs-admin-scope .dash-card:hover { transform: translateY(-2px); }.cgs-admin-scope .dash-card-top { display: flex; align-items: flex-start; justify-content: space-between; }.cgs-admin-scope .dash-icon {
+  width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 19px;
+}.cgs-admin-scope .dash-count { font-size: 26px; font-weight: 800; }.cgs-admin-scope .dash-card h3 { font-size: 15px; font-weight: 700; margin: 0; }.cgs-admin-scope .dash-status { display: flex; align-items: center; justify-content: space-between; }.cgs-admin-scope .status-pill {
+  display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600;
+  padding: 3px 9px; border-radius: 999px;
+}.cgs-admin-scope .status-pill.active { background: var(--success-bg); color: var(--success); }.cgs-admin-scope .status-pill.inactive { background: var(--danger-bg); color: var(--danger); }.cgs-admin-scope .dash-add-btn {
+  width: 30px; height: 30px; border-radius: 8px; border: none; background: var(--accent); color: white;
+  display: flex; align-items: center; justify-content: center; font-size: 15px;
+}.cgs-admin-scope .dash-add-btn:hover { background: var(--accent-dark); }.cgs-admin-scope /* ---------- Generic module page ---------- */
+.card-panel { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); }.cgs-admin-scope .card-panel-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }.cgs-admin-scope .card-panel-header h2 { font-size: 16px; margin: 0; font-weight: 700; }.cgs-admin-scope .btn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 16px; border-radius: var(--radius-sm); font-size: 13.5px; font-weight: 600; border: 1px solid transparent; }.cgs-admin-scope .btn-primary { background: var(--accent); color: white; }.cgs-admin-scope .btn-primary:hover { background: var(--accent-dark); }.cgs-admin-scope .btn-light { background: var(--bg); color: var(--text); border-color: var(--border); }.cgs-admin-scope .btn-light:hover { background: #e9ecf5; }.cgs-admin-scope .btn-danger-outline { background: var(--danger-bg); color: var(--danger); }.cgs-admin-scope .btn-sm { padding: 6px 12px; font-size: 12.5px; }.cgs-admin-scope .table-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; flex-wrap: wrap; gap: 10px; }.cgs-admin-scope .table-toolbar input { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 7px 12px; font-size: 13px; width: 220px; }.cgs-admin-scope table.data-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }.cgs-admin-scope table.data-table th {
+  text-align: left; padding: 10px 20px; background: var(--bg); color: var(--text-muted);
+  font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .4px;
+}.cgs-admin-scope table.data-table td { padding: 12px 20px; border-top: 1px solid var(--border); vertical-align: middle; }.cgs-admin-scope table.data-table tbody tr:hover { background: #fafbfe; }.cgs-admin-scope .thumb-img { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; background: #eef1f8; }.cgs-admin-scope .action-btn { width: 30px; height: 30px; border-radius: 7px; border: none; display: inline-flex; align-items: center; justify-content: center; margin-right: 4px; font-size: 13px; }.cgs-admin-scope .action-view { background: #e6f0ff; color: var(--accent); }.cgs-admin-scope .action-edit { background: #eafaf0; color: var(--success); }.cgs-admin-scope .action-delete { background: var(--danger-bg); color: var(--danger); }.cgs-admin-scope .empty-state { text-align: center; padding: 48px 20px; color: var(--text-muted); }.cgs-admin-scope .empty-state i { font-size: 34px; opacity: .35; display: block; margin-bottom: 10px; }.cgs-admin-scope /* ---------- Modal ---------- */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(16, 20, 35, 0.55); z-index: 50;
+  display: flex; align-items: flex-start; justify-content: center; padding: 40px 16px; overflow-y: auto;
+}.cgs-admin-scope .modal-box { background: white; border-radius: var(--radius); width: 100%; max-width: 620px; box-shadow: 0 20px 60px rgba(0,0,0,.25); }.cgs-admin-scope .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border-bottom: 1px solid var(--border); }.cgs-admin-scope .modal-header h3 { margin: 0; font-size: 16px; font-weight: 700; }.cgs-admin-scope .modal-close { background: none; border: none; font-size: 18px; color: var(--text-muted); }.cgs-admin-scope .modal-body { padding: 20px 22px; max-height: 65vh; overflow-y: auto; }.cgs-admin-scope .modal-footer { padding: 16px 22px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }.cgs-admin-scope .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }.cgs-admin-scope .form-group { margin-bottom: 14px; display: flex; flex-direction: column; gap: 6px; }.cgs-admin-scope .form-group.full { grid-column: 1 / -1; }.cgs-admin-scope .form-group label { font-size: 12.5px; font-weight: 600; color: var(--text-muted); }.cgs-admin-scope .form-group label .req { color: var(--danger); }.cgs-admin-scope .form-group input[type=text], .cgs-admin-scope .form-group input[type=number], .cgs-admin-scope .form-group input[type=date], .cgs-admin-scope .form-group input[type=email], .cgs-admin-scope .form-group textarea, .cgs-admin-scope .form-group select {
+  border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 9px 12px; font-size: 13.5px; width: 100%;
+}.cgs-admin-scope .form-group textarea { resize: vertical; min-height: 90px; }.cgs-admin-scope .form-group input[type=file] { font-size: 13px; }.cgs-admin-scope .checkbox-row { display: flex; align-items: center; gap: 8px; font-size: 13.5px; }.cgs-admin-scope .checkbox-group { display: flex; gap: 18px; flex-wrap: wrap; }.cgs-admin-scope .hint { font-size: 11.5px; color: var(--text-muted); }.cgs-admin-scope .img-preview { width: 90px; height: 90px; border-radius: 10px; object-fit: cover; border: 1px solid var(--border); margin-bottom: 8px; }.cgs-admin-scope /* ---------- Login ---------- */
+.login-screen {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(circle at 20% 20%, #1a2a5e, var(--navy) 60%);
+}.cgs-admin-scope .login-card { background: white; border-radius: 16px; padding: 36px 34px; width: 100%; max-width: 380px; box-shadow: 0 30px 80px rgba(0,0,0,.35); }.cgs-admin-scope .login-logo { width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(135deg, var(--accent), #7c3aed); display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; margin-bottom: 16px; }.cgs-admin-scope .login-card h1 { font-size: 20px; margin: 0 0 4px; }.cgs-admin-scope .login-card p.sub { color: var(--text-muted); font-size: 13.5px; margin: 0 0 22px; }.cgs-admin-scope .login-error { background: var(--danger-bg); color: var(--danger); font-size: 13px; padding: 9px 12px; border-radius: var(--radius-sm); margin-bottom: 14px; }.cgs-admin-scope .login-btn { width: 100%; padding: 11px; background: var(--accent); color: white; border: none; border-radius: var(--radius-sm); font-weight: 700; font-size: 14px; margin-top: 6px; }.cgs-admin-scope .login-btn:hover { background: var(--accent-dark); }.cgs-admin-scope .login-hint { margin-top: 18px; font-size: 12px; color: var(--text-muted); text-align: center; }.cgs-admin-scope @media (max-width: 900px) {
+  .sidebar { position: fixed; z-index: 40; transform: translateX(-100%); transition: transform .2s; }.cgs-admin-scope .sidebar.open { transform: translateX(0); }.cgs-admin-scope .form-grid { grid-template-columns: 1fr; }
+}

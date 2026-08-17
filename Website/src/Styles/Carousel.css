@@ -1,0 +1,52 @@
+/* =============================================
+   Carousel.css  –  CGS
+   Exact copy of akuastrono Carousel.css
+   ============================================= */
+
+.carousel {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.carousel-root {
+  width: 800px !important;
+}
+
+.carousel .slide {
+  background: #fff;
+}
+
+.carousel .carousel-status {
+  display: none;
+}
+
+.carousel .control-prev,
+.carousel .control-next {
+  font-size: 24px;
+  color: #333;
+}
+
+.carousel img {
+  width: auto;
+  height: 500px !important;
+  max-height: 500px;
+  display: block;
+  margin: 0 auto;
+  object-fit: cover;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .carousel {
+    margin-bottom: 10px;
+  }
+  .carousel-root {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 1226px) {
+  .carousel-root {
+    width: 100% !important;
+  }
+}

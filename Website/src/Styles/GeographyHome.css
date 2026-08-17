@@ -1,0 +1,832 @@
+/* =========================================================
+   SCHOOL OF GEOGRAPHY - HOME PAGE
+   Main Home Page Wrapper
+   ========================================================= */
+
+.geo-home {
+  font-family: Inter, Arial, sans-serif;
+  color: #20362a;
+  background: #fff;
+}
+
+
+/* =========================================================
+   ABOUT THE SCHOOL SECTION
+   Left side: About text
+   Right side: Statistics cards
+   ========================================================= */
+
+.about-section {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 35px;
+  padding: 20px 0 25px;
+}
+
+
+/* About section small green heading */
+
+.section-label {
+  font-size: 16px;
+  font-weight: 800;
+  color: #174d29;
+  border-bottom: 2px solid #bfd32d;
+  padding-bottom: 6px;
+  width: max-content;
+}
+
+
+/* About paragraph */
+
+.about-copy p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #424b45;
+  margin: 10px 0 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+
+/* About button */
+
+.green-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  background: #167035;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+
+/* Button / arrow icon */
+
+.green-button svg,
+.section-heading-row a svg,
+.program-body a svg {
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   STATISTICS SECTION
+   Academic Programmes / Faculty / Research / Students
+   ========================================================= */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+
+/* Individual statistics card */
+
+.stat-card {
+  min-height: 125px;
+  border: 1px solid #e0e4e0;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px #17321f08;
+}
+
+
+/* Statistics icon */
+
+.stat-icon {
+  font-size: 32px;
+  color: #1b6a35;
+  margin-bottom: 8px;
+}
+
+
+/* Statistics number */
+
+.stat-card strong {
+  font-size: 28px;
+  color: #174523;
+  line-height: 1;
+}
+
+
+/* Statistics title */
+
+.stat-card span {
+  font-size: 14px;
+  margin-top: 7px;
+  color: #222;
+  text-align: center;
+}
+
+
+/* =========================================================
+   ACADEMIC PROGRAMMES SECTION
+   Undergraduate / Postgraduate / Ph.D / Certificate
+   ========================================================= */
+
+.programs-section {
+  padding: 10px 0 18px;
+}
+
+
+/* Academic Programme heading */
+
+.center-heading {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+
+/* Academic Programme title */
+
+.center-heading h2 {
+  font-size: 26px;
+  margin: 0;
+  color: #153b22;
+}
+
+
+/* Small yellow/green line under heading */
+
+.center-heading span {
+  display: block;
+  width: 45px;
+  height: 2px;
+  background: #bdd32e;
+  margin: 5px auto;
+}
+
+
+/* Programme cards grid */
+
+.program-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+
+/* Individual programme card */
+
+.program-card {
+  border: 1px solid #dfe4df;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 2px 9px #0000000b;
+  background: #fff;
+}
+
+
+/* Programme image */
+
+.program-image {
+  height: 125px;
+  position: relative;
+  overflow: hidden;
+}
+
+
+/* Programme image itself */
+
+.program-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+/* Programme circular icon */
+
+.program-icon {
+  position: absolute;
+  bottom: -15px;
+  left: 14px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #0e6b31;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  border: 3px solid #fff;
+  font-size: 17px;
+}
+
+
+/* Programme card content */
+
+.program-body {
+  padding: 20px 15px 14px;
+}
+
+
+/* Programme title */
+
+.program-body h3 {
+  font-size: 17px;
+  margin: 0 0 9px;
+  color: #173b22;
+}
+
+
+/* Programme description */
+
+.program-body p {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0 0 6px;
+  color: #333;
+  min-height: 32px;
+}
+
+
+/* Programme small text */
+
+.program-body small {
+  font-size: 13px;
+  color: #333;
+  display: block;
+  margin-bottom: 13px;
+}
+
+
+/* Programme View Details link */
+
+.program-body a {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #174f2a;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   RESEARCH & INNOVATION SECTION
+   GIS / Remote Sensing / Urban / Environmental etc.
+   ========================================================= */
+
+.research-band {
+  background: linear-gradient(
+    90deg,
+    #062b12,
+    #0d421e,
+    #062b12
+  );
+  color: #fff;
+  margin-top: 0;
+  padding: 15px 0;
+}
+
+
+/* Research section heading */
+
+.center-heading.light {
+  margin-bottom: 12px;
+}
+
+
+/* Research heading */
+
+.center-heading.light h2 {
+  color: #fff;
+  font-size: 24px;
+}
+
+
+/* Research items grid */
+
+.research-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+
+/* Individual research item */
+
+.research-item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 6px 15px;
+  border-right: 1px solid #ffffff36;
+}
+
+
+/* Remove border from last item */
+
+.research-item:last-child {
+  border-right: 0;
+}
+
+
+/* Research circular icon */
+
+.research-item > svg {
+  flex: 0 0 auto;
+  background: #0e6730;
+  border: 1px solid #38804f;
+  width: 38px;
+  height: 38px;
+  padding: 9px;
+  border-radius: 50%;
+  font-size: 15px;
+}
+
+
+/* Research title */
+
+.research-item strong {
+  display: block;
+  font-size: 14px;
+}
+
+
+/* Research description */
+
+.research-item span {
+  display: block;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #d8e1d8;
+  margin-top: 4px;
+}
+
+
+/* =========================================================
+   FACULTY / NOTICE / EVENTS MAIN CONTENT
+   Three-column section
+   ========================================================= */
+
+.content-columns {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 20px;
+  padding: 20px 0;
+}
+
+
+/* Section heading row */
+
+.section-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #d8ded9;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+}
+
+
+/* Section heading */
+
+.section-heading-row h2 {
+  font-size: 17px;
+  margin: 0;
+  color: #173d24;
+}
+
+
+/* View All link */
+
+.section-heading-row a {
+  font-size: 11px;
+  color: #1c5a30;
+  text-decoration: none;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+
+/* =========================================================
+   FACULTY SECTION
+   ========================================================= */
+
+.faculty-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+
+/* Individual faculty card */
+
+.faculty-card {
+  border: 1px solid #e0e4e1;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fff;
+}
+
+
+/* Faculty image */
+
+.faculty-card > img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  object-position: center top;
+  background: #eef2ee;
+}
+
+
+/* Faculty information */
+
+.faculty-info {
+  padding: 8px;
+}
+
+
+/* Faculty name */
+
+.faculty-info strong {
+  font-size: 13px;
+  display: block;
+  color: #163c24;
+}
+
+
+/* Faculty designation */
+
+.faculty-info span {
+  display: block;
+  font-size: 11px;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+
+/* Faculty department / qualification */
+
+.faculty-info small {
+  display: block;
+  font-size: 10px;
+  color: #6a716c;
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
+
+/* =========================================================
+   NOTICE SECTION
+   ========================================================= */
+
+.notice-list,
+.event-list {
+  border-top: 1px solid #edf0ed;
+}
+
+
+/* Individual notice row */
+
+.notice-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  border-bottom: 1px solid #edf0ed;
+  text-decoration: none;
+  color: #1d3326;
+}
+
+
+/* Notice date box */
+
+.date-box {
+  width: 40px;
+  height: 42px;
+  flex: 0 0 40px;
+  border: 1px solid #b9d2c0;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* Notice day */
+
+.date-box b {
+  font-size: 14px;
+  line-height: 14px;
+  color: #275838;
+}
+
+
+/* Notice month */
+
+.date-box small {
+  font-size: 9px;
+  color: #5d6b61;
+}
+
+
+/* Notice title */
+
+.notice-title {
+  font-size: 13px;
+  line-height: 1.45;
+  flex: 1;
+}
+
+
+/* New notice badge */
+
+.notice-row em {
+  font-style: normal;
+  font-size: 8px;
+  background: #f4a22d;
+  color: #fff;
+  border-radius: 3px;
+  padding: 3px 5px;
+}
+
+
+/* =========================================================
+   UPCOMING EVENTS SECTION
+   ========================================================= */
+
+.event-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  border-bottom: 1px solid #edf0ed;
+  text-decoration: none;
+  color: #1d3326;
+}
+
+
+/* Event content */
+
+.event-row > div {
+  min-width: 0;
+}
+
+
+/* Event title */
+
+.event-row strong {
+  display: block;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+
+/* Event date / venue */
+
+.event-row span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #67736b;
+  margin-top: 4px;
+}
+
+
+/* Event clock/location icon */
+
+.event-row span svg {
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   PHOTO GALLERY SECTION
+   ========================================================= */
+
+.gallery-section {
+  padding: 0 0 20px;
+}
+
+
+/* Gallery image grid */
+
+.gallery-strip {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+
+
+/* Individual gallery image */
+
+.gallery-thumb {
+  height: 90px;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+  display: block;
+}
+
+
+/* Gallery image */
+
+.gallery-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.25s;
+}
+
+
+/* Gallery hover effect */
+
+.gallery-thumb:hover img {
+  transform: scale(1.05);
+}
+
+
+/* Gallery image icon */
+
+.gallery-thumb span {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  background: #0b5b2a;
+  color: #fff;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   TABLET RESPONSIVE
+   Screen width below 1000px
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+  /* About section becomes single column */
+  .about-section {
+    grid-template-columns: 1fr;
+  }
+
+  /* Statistics */
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Programmes become 2 columns */
+  .program-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Faculty / Notices / Events */
+  .content-columns {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Faculty takes full row */
+  .faculty-column {
+    grid-column: 1 / -1;
+  }
+
+  /* Research */
+  .research-grid {
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 10px;
+  }
+
+  .research-item:nth-child(3) {
+    border-right: 0;
+  }
+}
+
+
+/* =========================================================
+   MOBILE RESPONSIVE
+   Screen width below 680px
+   ========================================================= */
+
+@media (max-width: 680px) {
+
+  /* Header width */
+  .header-container {
+    width: 94%;
+  }
+
+
+  /* About paragraph on mobile */
+  .about-copy p {
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+
+  /* Statistics become 2 columns */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+
+  /* Programme cards become single column */
+  .program-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  /* Research becomes single column */
+  .research-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  /* Research item border */
+  .research-item {
+    border-right: 0;
+    border-bottom: 1px solid #ffffff20;
+    padding: 9px;
+  }
+
+
+  /* Content sections become single column */
+  .content-columns {
+    grid-template-columns: 1fr;
+  }
+
+
+  /* Faculty cards - 2 columns */
+  .faculty-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+
+  /* Gallery - 2 columns */
+  .gallery-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+
+  /* Gallery image height */
+  .gallery-thumb {
+    height: 105px;
+  }
+
+
+  /* About section spacing */
+  .about-section {
+    padding-top: 14px;
+  }
+
+
+  /* Section headings on mobile */
+  .center-heading h2 {
+    font-size: 23px;
+  }
+
+
+  .center-heading.light h2 {
+    font-size: 21px;
+  }
+
+
+  /* Programme title */
+  .program-body h3 {
+    font-size: 17px;
+  }
+
+
+  /* Programme text */
+  .program-body p {
+    font-size: 14px;
+  }
+
+
+  /* Faculty name */
+  .faculty-info strong {
+    font-size: 13px;
+  }
+
+
+  /* Notice text */
+  .notice-title {
+    font-size: 13px;
+  }
+
+
+  /* Event title */
+  .event-row strong {
+    font-size: 13px;
+  }
+}

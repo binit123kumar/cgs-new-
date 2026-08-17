@@ -1,0 +1,39 @@
+/* =============================================
+   Aim.css  –  CGS
+   Exact copy of akuastrono Aim.css
+   ============================================= */
+
+.AimdBox {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  padding: 20px;
+}
+
+.main-heading {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.heading-underline {
+  border: 2px solid #2e6b3e;
+  margin-bottom: 20px;
+}
+
+.AimContent {
+  text-align: justify;
+  font-size: 1.2em;
+  line-height: 1.6;
+  color: #555;
+  font-weight: 500;
+}
+
+.AimContent h2 {
+  color: #2e6b3e;
+  margin-top: 20px;
+  margin-bottom: 8px;
+}
+
+.AimContent h3 {
+  color: #333;
+  margin-top: 14px;
+  margin-bottom: 6px;
+}

@@ -1,0 +1,58 @@
+/* =============================================
+   ImportantBox.css  –  CGS
+   Exact layout as akuastrono; brand color swapped
+   to CGS forest-green #2e6b3e
+   ============================================= */
+
+.Important-Box {
+  width: 400px;
+  height: 500px;
+  background-color: #efeded;
+  padding: 15px;
+}
+
+.Important-Heading {
+  width: 100%;
+  height: 50px;
+  background: #2e6b3e;        /* CGS green */
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  color: white;
+  padding-left: 20px;
+}
+
+.Important-Content {
+  height: calc(100% - 65px);
+  overflow-y: auto;
+  padding-right: 15px;
+}
+
+.Important-Content::-webkit-scrollbar {
+  width: 8px;
+}
+.Important-Content::-webkit-scrollbar-thumb {
+  background-color: #2e6b3e;
+  border-radius: 10px;
+}
+.Important-Content::-webkit-scrollbar-track {
+  background-color: #efeded;
+}
+
+.Important-Par {
+  text-decoration: none;
+  padding: 8px;
+}
+
+.Important-data {
+  text-decoration: none;
+  font-size: 17px;
+  font-weight: 600;
+  color: blue;
+}
+
+@media (max-width: 600px) {
+  .Important-Box {
+    width: 350px;
+  }
+}

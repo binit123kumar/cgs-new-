@@ -1,0 +1,232 @@
+/* =========================================================
+   FOOTER.CSS
+   Used by: src/components/Footer.jsx
+   Layout direction:
+     - Desktop: HORIZONTAL row of 5 columns (footer-main = grid)
+     - Inside each column: content stacks VERTICALLY (footer-col = flex column)
+     - Below 900px / 600px: columns re-wrap (see media queries at bottom)
+   ========================================================= */
+
+
+/* Outer <footer> wrapper. Sets the dark green background and base
+   text color/font for the entire footer (all child elements inherit
+   this unless overridden below). */
+.geo-footer {
+  background: #062d16;
+  color: #dfe9e0;
+  font-family: Inter, Arial, sans-serif;
+}
+
+
+/* .footer-main = the <div className="footer-main header-container">
+   that holds all 5 columns (School info / Quick Links / Important
+   Links / Student Corner / Follow Us).
+   HORIZONTAL layout: flex row, columns evenly spread with
+   justify-content: space-around. */
+.footer-main {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 25px clamp(16px, 4vw, 60px) 22px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 15px;
+}
+
+
+/* .footer-col = EACH individual column (School info, Quick Links,
+   Important Links, Student Corner, Follow Us).
+   VERTICAL layout: heading + links stack top-to-bottom inside the
+   column. flex-basis gives each column a sensible starting width
+   under the new flex-based footer-main. */
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  flex: 0 1 160px;
+}
+
+.school-footer {
+  flex: 0 1 240px;
+}
+
+/* Column heading, e.g. "QUICK LINKS", "IMPORTANT LINKS" (<h3> tag). */
+.footer-col h3 {
+  font-size: 14px;
+  color: #fff;
+  margin: 0 0 7px;
+  letter-spacing: .4px;
+}
+
+/* Every plain link inside a footer column (Home, About Us, UGC,
+   NAAC, Academic Syllabus, etc.) */
+.footer-col a {
+  font-size: 13px;
+  color: #d3ddd5;
+  text-decoration: none;
+}
+
+.footer-col a:hover {
+  color: #cbdc40;
+}
+
+
+/* -------------------------------------------------------
+   COLUMN 1: SCHOOL INFO (address / phone / email)
+   className="footer-col school-footer"
+   ------------------------------------------------------- */
+
+/* Each contact line (address / phone / email <p> tag).
+   HORIZONTAL inside itself: icon + text sit side-by-side (flex row),
+   but each line stacks VERTICALLY below the previous one. */
+.school-footer p {
+  font-size: 13px;
+  line-height: 1.65;
+  margin: 5px 0;
+  color: #d5dfd6;
+  display: flex;
+  gap: 8px;
+}
+
+/* The small icon (map pin / phone / envelope) before each contact line. */
+.school-footer p svg {
+  color: #bdd52f;
+  margin-top: 2px;
+  flex: 0 0 auto;
+}
+
+/* "SCHOOL OF GEOGRAPHY" brand row at the top of the school column
+   (globe icon + title + subtitle). HORIZONTAL: icon next to text. */
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 8px;
+}
+
+/* The 🌍 globe emoji used as a placeholder logo. */
+.footer-globe {
+  font-size: 28px;
+}
+
+/* "SCHOOL OF GEOGRAPHY" bold title text. */
+.footer-brand strong {
+  display: block;
+  font-size: 16px;
+  color: #fff;
+}
+
+/* "Aryabhatta Knowledge University" subtitle under the brand title. */
+.footer-brand span {
+  display: block;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+
+/* -------------------------------------------------------
+   COLUMN 5: FOLLOW US (social icons + map)
+   className="footer-col social-footer"
+   ------------------------------------------------------- */
+
+/* Row of circular social media icons (Facebook/Twitter/Instagram/
+   YouTube/LinkedIn). HORIZONTAL: icons sit side-by-side. */
+.social-icons {
+  display: flex;
+  gap: 7px;
+  margin: 2px 0 10px;
+}
+
+/* Each individual circular social icon button. */
+.social-icons a {
+  width: 24px;
+  height: 24px;
+  background: #f7f9f7;
+  color: #0b4d23;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+
+/* "LOCATION" sub-heading above the embedded Google Map. */
+.social-footer h4 {
+  font-size: 13px;
+  color: #fff;
+  margin: 3px 0;
+}
+
+/* Container that clips/rounds the embedded Google Map iframe. */
+.footer-map {
+  height: 70px;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.footer-map iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  filter: saturate(.75);
+}
+
+
+/* -------------------------------------------------------
+   BOTTOM COPYRIGHT BAR
+   className="footer-bottom" (separate <div> below footer-main)
+   ------------------------------------------------------- */
+
+/* Thin strip below the main footer columns, slightly darker green,
+   with a 1px top border separating it from footer-main. */
+.footer-bottom {
+  border-top: 1px solid #ffffff18;
+  background: #041f0e;
+}
+
+/* Inner row: copyright text (left) + "Designed & Developed by..."
+   (right). HORIZONTAL: the two <span> texts sit on opposite ends. */
+.footer-bottom > div {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 clamp(16px, 4vw, 60px);
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #bdc8bf;
+}
+
+
+/* =========================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================= */
+
+/* Tablets (<=900px): columns wrap onto multiple rows automatically
+   (flex-wrap). Follow Us column takes the full row width. */
+@media (max-width: 900px) {
+  .social-footer {
+    flex-basis: 100%;
+  }
+}
+
+/* Phones (<=600px): School info AND Follow Us both become
+   full-width rows. Bottom bar switches from horizontal row to
+   VERTICAL stack (copyright text above, credit text below). */
+@media (max-width: 600px) {
+  .footer-main {
+    gap: 10px;
+  }
+  .school-footer {
+    flex-basis: 100%;
+  }
+  .social-footer {
+    flex-basis: 100%;
+  }
+  .footer-bottom > div {
+    height: auto;
+    padding: 9px 0;
+    gap: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
