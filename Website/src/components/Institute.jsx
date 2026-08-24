@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../Styles/Institute.css';
 import Carousels from './Carousels';
 import ImportantBox from './ImportantBox';
+import { getAbout, getDownloads, getNews, getNotices, fileUrl } from '../api/cmsApi';
 
 // ── PDF Imports ──
 // Niche diye gaye paths ko apne actual folder structure ke hisaab se adjust karein
@@ -32,12 +33,32 @@ const ImportantLinks = [
 ];
 
 function Institute() {
+  const [content, setContent] = useState({ about: [], news: [], notices: [], downloads: [] });
+
+  useEffect(() => {
+    Promise.all([getAbout(), getNews(), getNotices(), getDownloads()]).then(([about, news, notices, downloads]) => {
+      setContent({ about: about || [], news: news || [], notices: notices || [], downloads: downloads || [] });
+    });
+  }, []);
+
+  const cmsAnnouncements = [...content.notices, ...content.news].slice(0, 8).map((item, index) => ({
+    id: item.id || index,
+    NewsName: item.title,
+    href: item.linkUrl || (item.filePath ? fileUrl(item.filePath) : '/notices'),
+  }));
+  const cmsDownloads = content.downloads.slice(0, 8).map((item, index) => ({
+    id: item.id || index,
+    NewsName: item.title,
+    href: fileUrl(item.filePath),
+  }));
+  const intro = content.about.slice(0, 3);
+
   return (
     <div className="Institute-tab">
       <div className="Institute-tab-one">
         <Carousels />
         <ImportantBox
-          NewsAndAnnouncement={NewsAndAnnouncement}
+          NewsAndAnnouncement={cmsAnnouncements.length ? cmsAnnouncements : NewsAndAnnouncement}
           Image={NewBadgeImage}
           BoxHeading={BoxHeading}
         />
@@ -45,25 +66,16 @@ function Institute() {
 
       <div className="Institute-tab-two">
         <div className="Institute-tab-content">
-          <h3 className="institute-text">
-            The Centre For Geographical Studies (CGS) came into existence vide
-            Bihar Government notification 15/P 5-09/2016 va'k-193, Date 09.02.2018
-            as an autonomous institute affiliated to Aryabhatta Knowledge University.
-          </h3>
-          <h3 className="institute-text">
-            The Centre was established as a centre of excellence by the Bihar Government
-            with the basic objectives of teaching, training, and undertaking research in
-            the areas of Geographical Studies. 
-          </h3>
-          <h3 className="institute-text">
-            The first batch of M.A./M.Sc. in Geography was launched in 2022. The Centre 
-            aims to become a premier institute of Geographical Studies in the Bihar region.
-          </h3>
+          {(intro.length ? intro : [
+            { id: 1, description: 'The Centre For Geographical Studies (CGS) came into existence as an autonomous institute affiliated to Aryabhatta Knowledge University.' },
+            { id: 2, description: 'The Centre was established as a centre of excellence for teaching, training, and research in Geographical Studies.' },
+            { id: 3, description: 'The Centre aims to become a premier institute of Geographical Studies in the Bihar region.' },
+          ]).map((entry) => <h3 className="institute-text" key={entry.id}>{entry.description}</h3>)}
         </div>
 
         <div className="Institute-links-wrapper">
           <ImportantBox
-            NewsAndAnnouncement={ImportantLinks}
+            NewsAndAnnouncement={cmsDownloads.length ? cmsDownloads : ImportantLinks}
             Image={NewBadgeImage}
             BoxHeading={BoxHeadingSecond}
           />

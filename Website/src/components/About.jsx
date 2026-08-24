@@ -1,21 +1,22 @@
 /**
- * About.jsx  –  CGS (Centre for Geographical Studies)
+ * About.jsx - CGS (Centre for Geographical Studies)
  *
- * STRUCTURE: Identical to akuastrono About.jsx
- * DATA CHANGED: CGS about text from cgs-main/about.html
+ * Decorative "geography" theme: topographic contour-line background,
+ * compass/mountain accents, earth-tone card. See About.css.
  */
 
 import React, { useEffect, useState } from 'react';
 import '../Styles/About.css';
 import { getAbout, fileUrl } from '../api/cmsApi';
+import { FaCompass, FaMountain } from 'react-icons/fa';
 
-// Original static copy — used automatically if the CMS backend has no
+// Original static copy - used automatically if the CMS backend has no
 // "About" entries yet (or isn't reachable), so the page never looks broken.
 const fallbackParagraphs = [
   `The Centre For Geographical Studies (CGS) came into existence vide Bihar
   Government notification 15/P 5-09/2016 va'k-193, Date 09.02.2018 as an autonomous
   institute affiliated to Aryabhatta Knowledge University. However, vide Bihar
-  Government notification 15/M 1-69/2021 – 1997, dated September 20th, 2021, the
+  Government notification 15/M 1-69/2021 - 1997, dated September 20th, 2021, the
   Centre for Geographical Studies is now a constituent unit of the Aryabhatta
   Knowledge University.`,
   `The Centre for Geographical Studies was established as a centre of excellence by
@@ -40,39 +41,51 @@ function About() {
     getAbout().then(setEntries);
   }, []);
 
+  const heading = (
+    <div className="About-heading-row">
+      <FaCompass className="About-compass" />
+      <h1 className="About-heading">About Us</h1>
+      <FaMountain className="About-mountain" />
+    </div>
+  );
+
   // Still loading, or backend had nothing for the About page -> show the
   // original static content so the page is never empty.
   if (!entries || entries.length === 0) {
     return (
-      <div className="About-par">
-        <h1 className="About-heading">About Us</h1>
-        {fallbackParagraphs.map((text, i) => (
-          <React.Fragment key={i}>
-            <p className="About-detail">{text}</p>
-            <br />
-          </React.Fragment>
-        ))}
+      <div className="About-page">
+        <div className="About-par">
+          {heading}
+          {fallbackParagraphs.map((text, i) => (
+            <React.Fragment key={i}>
+              <p className="About-detail">{text}</p>
+              <br />
+            </React.Fragment>
+          ))}
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="About-par">
-      <h1 className="About-heading">About Us</h1>
-      {entries.map((entry) => (
-        <React.Fragment key={entry.id}>
-          <h2 style={{ marginTop: 18 }}>{entry.title}</h2>
-          {entry.imagePath && (
-            <img
-              src={fileUrl(entry.imagePath)}
-              alt={entry.title}
-              style={{ maxWidth: '100%', borderRadius: 8, margin: '12px 0' }}
-            />
-          )}
-          <p className="About-detail">{entry.description}</p>
-          <br />
-        </React.Fragment>
-      ))}
+    <div className="About-page">
+      <div className="About-par">
+        {heading}
+        {entries.map((entry) => (
+          <React.Fragment key={entry.id}>
+            <h2 className="About-subheading">{entry.title}</h2>
+            {entry.imagePath && (
+              <img
+                src={fileUrl(entry.imagePath)}
+                alt={entry.title}
+                className="About-image"
+              />
+            )}
+            <p className="About-detail">{entry.description}</p>
+            <br />
+          </React.Fragment>
+        ))}
+      </div>
     </div>
   );
 }

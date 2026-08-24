@@ -1,17 +1,57 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaFacebookF, FaTwitter, FaInstagram, FaYoutube, FaLinkedinIn } from 'react-icons/fa';
+import { getSettings } from '../api/cmsApi';
+import { FaMapMarkerAlt, FaPhone, FaEnvelope, FaFacebookF, FaTwitter, FaInstagram, FaYoutube, FaLinkedinIn, FaCalendarAlt, FaClock, FaUsers } from 'react-icons/fa';
 import '../Styles/Footer.css';
 
 export default function Footer() {
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [visitorCounts, setVisitorCounts] = useState({ total: 0, today: 0 });
+  const [settings, setSettings] = useState(null);
+
+  useEffect(() => {
+    getSettings().then(setSettings);
+    const updateClock = () => setCurrentTime(new Date());
+    const clockTimer = window.setInterval(updateClock, 1000);
+    const todayKey = new Date().toISOString().slice(0, 10);
+    const storageKey = 'cgs-visitor-counts';
+    const visitMarker = 'cgs-visitor-session';
+    const savedCounts = JSON.parse(window.localStorage.getItem(storageKey) || '{}');
+    const counts = savedCounts.date === todayKey
+      ? savedCounts
+      : { total: savedCounts.total || 0, today: 0, date: todayKey };
+
+    if (!window.sessionStorage.getItem(visitMarker)) {
+      counts.total += 1;
+      counts.today += 1;
+      window.sessionStorage.setItem(visitMarker, '1');
+      window.localStorage.setItem(storageKey, JSON.stringify(counts));
+    }
+    setVisitorCounts({ total: counts.total, today: counts.today });
+
+    return () => window.clearInterval(clockTimer);
+  }, []);
+
+  const address = settings?.address || settings?.Address || 'Aryabhatta Knowledge University, Patna, Bihar - 800001';
+  const phone = settings?.phone || settings?.Phone || '+91 612 235 0000';
+  const email = settings?.email || settings?.Email || 'geography@aku.ac.in';
+  const siteName = settings?.siteName || settings?.SiteName || 'School of Geography';
+
+  const dateLabel = currentTime.toLocaleDateString('en-IN', {
+    day: '2-digit', month: 'long', year: 'numeric'
+  });
+  const timeLabel = currentTime.toLocaleTimeString('en-IN', {
+    hour: '2-digit', minute: '2-digit', second: '2-digit'
+  });
+
   return (
     <footer className="geo-footer">
       <div className="footer-main">
         <div className="footer-col school-footer">
-          <div className="footer-brand"><div className="footer-globe">🌍</div><div><strong>SCHOOL OF GEOGRAPHY</strong><span>Aryabhatta Knowledge University</span></div></div>
-          <p><FaMapMarkerAlt /> Aryabhatta Knowledge University<br />Patna, Bihar - 800001</p>
-          <p><FaPhone /> +91 612 235 0000</p>
-          <p><FaEnvelope /> geography@aku.ac.in</p>
+          <div className="footer-brand"><div className="footer-globe">🌍</div><div><strong>{siteName}</strong><span>Aryabhatta Knowledge University</span></div></div>
+          <p><FaMapMarkerAlt /> {address}</p>
+          <p><FaPhone /> {phone}</p>
+          <p><FaEnvelope /> {email}</p>
         </div>
         <div className="footer-col">
           <h3>QUICK LINKS</h3>
@@ -32,7 +72,19 @@ export default function Footer() {
           <div className="footer-map"><iframe title="Aryabhatta Knowledge University location" src="https://www.google.com/maps?q=Aryabhatta+Knowledge+University,+Patna&output=embed" loading="lazy" /></div>
         </div>
       </div>
-      <div className="footer-bottom"><div className="footer-bottom-inner"><span>© 2026 School of Geography, Aryabhatta Knowledge University. All Rights Reserved.</span><span>Designed &amp; Developed by AKU IT Cell</span></div></div>
+      <div className="footer-bottom">
+        <div className="footer-live-info">
+          <div className="footer-date-time">
+            <span><FaCalendarAlt /> {dateLabel}</span>
+            <span><FaClock /> {timeLabel}</span>
+          </div>
+          <div className="footer-visitor-stats">
+            <span><FaUsers /> Total Visitors: {visitorCounts.total}</span>
+            <span><FaUsers /> Today Visitors: {visitorCounts.today}</span>
+          </div>
+        </div>
+        <div className="footer-bottom-inner"><span>© 2026 School of Geography, Aryabhatta Knowledge University. All Rights Reserved.</span><span>Designed &amp; Developed by AKU IT Cell</span></div>
+      </div>
     </footer>
   );
 }

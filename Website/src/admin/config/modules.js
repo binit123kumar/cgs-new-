@@ -22,6 +22,7 @@ export const modules = {
       { name: 'showOnHomePage', label: 'Home Page', type: 'checkbox', group: 'Show On Website' },
       { name: 'showOnAboutPage', label: 'About Page', type: 'checkbox', group: 'Show On Website', default: true },
       { name: 'showOnFooter', label: 'Footer', type: 'checkbox', group: 'Show On Website' },
+      { name: 'isDirectorMessage', label: 'Use this entry on Director Message page', type: 'checkbox', default: false, full: true },
       { name: 'image', label: 'Image', type: 'file', image: true, hint: 'Recommended size: 1200x600' },
     ],
     columns: [
@@ -48,6 +49,8 @@ export const modules = {
       { name: 'email', label: 'Email', type: 'text' },
       { name: 'phone', label: 'Phone', type: 'text' },
       { name: 'bio', label: 'Bio', type: 'textarea', full: true },
+      { name: 'isGuestFaculty', label: 'Guest Faculty (show on Guest Faculty page)', type: 'checkbox', default: false, full: true },
+      { name: 'isDirector', label: 'Director (hide from Faculty page)', type: 'checkbox', default: false, full: true },
       { name: 'displayOrder', label: 'Display Order', type: 'number', default: 1 },
       { name: 'isActive', label: 'Active', type: 'checkbox', default: true },
       { name: 'photo', label: 'Photo', type: 'file', image: true },
@@ -97,10 +100,11 @@ export const modules = {
     imageField: 'imagePath',
     fields: [
       { name: 'title', label: 'Title', type: 'text', required: true },
-      { name: 'category', label: 'Category', type: 'text' },
+      { name: 'category', label: 'Category', type: 'text', required: true, hint: 'Use the same category name for all photographs in one album.' },
+      { name: 'isPrimary', label: 'Category cover image (shown on Home)', type: 'checkbox', default: false, full: true },
       { name: 'displayOrder', label: 'Display Order', type: 'number', default: 1 },
       { name: 'isActive', label: 'Active', type: 'checkbox', default: true },
-      { name: 'image', label: 'Image', type: 'file', image: true, requiredOnCreate: true },
+      { name: 'images', label: 'Photos', type: 'file', image: true, multiple: true, requiredOnCreate: true, hint: 'Select one or more photos. The first photo is used as the cover when “Category cover image” is checked.' },
     ],
     columns: [
       { key: 'thumb', label: 'Image' },
@@ -122,6 +126,7 @@ export const modules = {
     fields: [
       { name: 'title', label: 'Title', type: 'text', required: true, full: true },
       { name: 'description', label: 'Description', type: 'textarea', full: true },
+      { name: 'linkUrl', label: 'News link (optional)', type: 'text', full: true, hint: 'Internal path, e.g. /notices, or a complete https:// link.' },
       { name: 'publishDate', label: 'Publish Date', type: 'date', default: 'today' },
       { name: 'displayOrder', label: 'Display Order', type: 'number', default: 1 },
       { name: 'isActive', label: 'Active', type: 'checkbox', default: true },
@@ -218,6 +223,7 @@ export const modules = {
     endpoint: '/courses',
     titleField: 'name',
     imageField: 'imagePath',
+    fileField: 'pdfPath',
     fields: [
       { name: 'name', label: 'Course Name', type: 'text', required: true, full: true },
       { name: 'description', label: 'Description', type: 'textarea', full: true },
@@ -225,12 +231,14 @@ export const modules = {
       { name: 'eligibility', label: 'Eligibility', type: 'text' },
       { name: 'displayOrder', label: 'Display Order', type: 'number', default: 1 },
       { name: 'isActive', label: 'Active', type: 'checkbox', default: true },
-      { name: 'image', label: 'Image', type: 'file', image: true },
+      { name: 'image', label: 'Course Cover Image (JPG/PNG)', type: 'file', image: true, accept: 'image/jpeg,image/png,image/webp', hint: 'Recommended cover size: 1200x700 px' },
+      { name: 'pdf', label: 'Course PDF / Syllabus', type: 'file', accept: 'application/pdf', hint: 'PDF only — syllabus, brochure or ordinance.' },
     ],
     columns: [
       { key: 'thumb', label: 'Image' },
       { key: 'name', label: 'Course' },
       { key: 'duration', label: 'Duration' },
+      { key: 'file', label: 'PDF' },
       { key: 'status', label: 'Status' },
     ],
   },

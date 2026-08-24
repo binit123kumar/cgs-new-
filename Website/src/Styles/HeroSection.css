@@ -44,12 +44,19 @@
 }
 
 
-/* Main content width */
+/* Main content width — full-width, same left/right padding
+   everywhere so all sections' edges line up in a straight column
+   (top strip, navbar, hero text, and every Home page section). */
 
 .header-container {
-  width: min(1180px, 92%);
-  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 clamp(24px, 6vw, 90px);
+  margin: 0;
 }
+
+.mobile-nav-trigger-row { display: none; }
+.mobile-nav-trigger { display: none; }
 
 
 /* =========================================================
@@ -157,12 +164,12 @@
 .brand-inner {
   width: 100%;
   box-sizing: border-box;
-  padding: 0 clamp(16px, 4vw, 60px);
+  padding: 0 clamp(24px, 6vw, 90px);
   min-height: 91px;
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  gap: 10px;
+  justify-content: space-between;
+  gap: clamp(24px, 5vw, 90px);
 }
 
 
@@ -228,11 +235,20 @@
 }
 
 
+/* University brand — compact, fixed */
+
+.university-brand {
+  flex: 0 0 auto;
+}
+
+
 /* School brand */
 
 .school-brand {
-  justify-content: center;
-  gap: 10px;
+  justify-content: flex-start;
+  gap: 14px;
+  flex: 1 1 auto;
+  max-width: none;
 }
 
 
@@ -301,8 +317,6 @@
   overflow: hidden;
   border: 1px solid transparent;
   transition: border-color 0.2s, box-shadow 0.2s;
-  margin-left: auto;
-  align-self: center;
 }
 
 .header-search.focused {
@@ -381,9 +395,11 @@
 /* Navigation container */
 
 .nav-inner {
+  width: min(100%, 1180px);
+  margin: 0 auto;
   display: flex;
   align-items: stretch;
-  justify-content: flex-start;
+  justify-content: space-around;
   overflow: visible;
 }
 
@@ -411,6 +427,7 @@
   white-space: nowrap;
   position: relative;
   cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 
@@ -428,11 +445,30 @@
 .nav-link.active::after {
   content: "";
   height: 2px;
-  background: #c6d83c;
+  background: linear-gradient(90deg, #c99a3e, #e9d99a);
   position: absolute;
   left: 10px;
   right: 10px;
   bottom: 0;
+  transition: opacity 0.2s ease;
+}
+
+.nav-search-icon,
+.nav-search-icon svg {
+  justify-content: center;
+  font-size: 18px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 
@@ -440,6 +476,11 @@
 
 .nav-menu-button svg {
   font-size: 9px;
+  transition: transform 0.2s ease;
+}
+
+.nav-menu-button.menu-open svg {
+  transform: rotate(180deg);
 }
 
 
@@ -461,7 +502,21 @@
   min-width: 230px;
   background: #fff;
   border: 1px solid #e0e4e0;
-  box-shadow: 0 10px 25px #0002;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 12px 28px #00000022;
+  animation: dropdown-in 0.18s ease;
+  overflow: hidden;
+}
+
+@keyframes dropdown-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 
@@ -476,6 +531,7 @@
   font-size: 15px;
 
   padding: 12px 15px;
+  transition: background 0.15s ease, color 0.15s ease, padding-left 0.15s ease;
 }
 
 
@@ -484,6 +540,7 @@
 .dropdown-panel a:hover {
   background: #f1f5f1;
   color: #0d4b23;
+  padding-left: 19px;
 }
 
 
@@ -492,20 +549,89 @@
    ========================================================= */
 
 .geo-hero {
-  height: 350px;
+  min-height: 640px;
   position: relative;
-
-  /* Hero image comes from React via --hero-image */
-  background-image: var(
-    --hero-image,
-    url('https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1900&q=85')
-  );
-
-  background-position: center 56%;
-  background-size: cover;
-
+  width: 100%;
+  max-width: none;
+  isolation: isolate;
   color: #fff;
   overflow: hidden;
+}
+
+.geo-hero-slides {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: max(30%, 500px);
+  overflow: hidden;
+  background: #082d16;
+}
+
+.geo-hero-campus-background {
+  position: absolute;
+  inset: 0 auto 0 0;
+  z-index: 0;
+  width: max(30%, 500px);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.geo-hero-campus-background::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(3, 35, 17, .28), rgba(3, 35, 17, .12) 72%, rgba(3, 35, 17, .03));
+}
+
+.geo-hero-slide {
+  position: absolute;
+  top: 2%;
+  height: 96%;
+  border: 8px solid rgba(255, 255, 255, .86);
+  border-radius: 5px;
+  background-position: center;
+  background-size: cover;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, .34);
+  animation: hero-collage-in 1s cubic-bezier(.2, .75, .25, 1) both;
+  transform-origin: center;
+}
+
+.geo-hero-slide::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, rgba(255, 255, 255, .12), transparent 45%, rgba(0, 0, 0, .18));
+}
+
+.geo-hero-slide:nth-child(1) {
+  z-index: 3;
+  left: 0%;
+  width: 35%;
+  transform: rotate(-2deg);
+}
+
+.geo-hero-slide:nth-child(2) {
+  z-index: 2;
+  left: 31%;
+  width: 38%;
+  height: 100%;
+  transform: rotate(0deg);
+  animation-delay: .08s;
+}
+
+.geo-hero-slide:nth-child(3) {
+  z-index: 1;
+  left: 66%;
+  width: 34%;
+  transform: rotate(2deg);
+  animation-delay: .16s;
+}
+
+@keyframes hero-collage-in {
+  from { opacity: 0; transform: translateY(20px) scale(.94) rotate(0); }
+  to { opacity: 1; }
 }
 
 
@@ -518,10 +644,11 @@
   background:
     linear-gradient(
       90deg,
-      rgba(3, 35, 17, 0.85),
-      rgba(3, 35, 17, 0.35) 55%,
-      rgba(0, 0, 0, 0.08)
-    );
+      rgba(3, 35, 17, 0.48),
+      rgba(3, 35, 17, 0.16) 55%,
+      rgba(0, 0, 0, 0.03)
+    ),
+    linear-gradient(135deg, rgba(13, 64, 31, .25), transparent 52%);
 }
 
 
@@ -529,7 +656,13 @@
 
 .geo-hero-content {
   position: relative;
+  z-index: 4;
   padding-top: 50px;
+}
+
+.hero-fixed-copy {
+  animation: none;
+  opacity: 1;
 }
 
 
@@ -551,6 +684,7 @@
   font-size: 44px;
   line-height: 1.05;
   margin: 0 0 16px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, .55);
 }
 
 
@@ -656,9 +790,7 @@
     font-size: 14px;
   }
 
-  .brand-inner {
-    grid-template-columns: 1fr 1.3fr;
-  }
+  .brand-inner { gap: 24px; }
 
   .header-search {
     display: none;
@@ -703,10 +835,9 @@
   }
 
 
-  /* Hide university brand */
-  .university-brand {
-    display: none;
-  }
+  .university-brand { display: flex; width: 100%; justify-content: center; }
+  .university-brand strong { font-size: 15px; }
+  .university-brand span { font-size: 12px; }
 
 
   /* School brand */
@@ -722,40 +853,45 @@
   }
 
 
-  /* Horizontal navbar scroll */
-  .main-nav {
-    overflow-x: auto;
-  }
-
-
-  .nav-inner {
-    width: max-content;
-    margin: 0 auto;
-  }
+  .mobile-nav-trigger-row { display: block; padding-top: 7px; padding-bottom: 7px; }
+  .mobile-nav-trigger { display: inline-flex; align-items: center; gap: 9px; border: 1px solid #ffffff45; border-radius: 6px; padding: 8px 12px; background: #0d4b23; color: #fff; font-size: 14px; font-weight: 700; }
+  .nav-inner { display: none; width: 100%; max-width: none; padding: 0 12px 12px; margin: 0; flex-direction: column; align-items: stretch; }
+  .nav-inner.nav-open { display: flex; }
+  .nav-menu { width: 100%; }
 
 
   /* Mobile navigation */
   .nav-link {
-    height: 45px;
+    height: 44px;
     padding: 0 13px;
     font-size: 14px;
+    width: 100%;
+    justify-content: space-between;
   }
 
 
   /* Mobile dropdown */
   .dropdown-panel {
-    top: 45px;
+    position: static;
+    width: 100%;
+    min-width: 0;
+    border-radius: 0 0 6px 6px;
+    box-shadow: none;
   }
+
+  .header-search { display: flex; margin: 8px 0 0; width: 100%; }
+  .header-search input { flex: 1; width: auto; }
 
 
   /* Hero */
   .geo-hero {
-    height: 390px;
+    min-height: 600px;
   }
 
 
   .geo-hero-content {
     padding-top: 65px;
+    z-index: 6;
   }
 
 
@@ -767,6 +903,40 @@
   .geo-hero p {
     max-width: 350px;
     font-size: 15px;
+  }
+
+  .geo-hero-slides {
+    top: 52%;
+    left: 0;
+    height: 48%;
+  }
+
+  .geo-hero-campus-background {
+    width: 100%;
+    height: 52%;
+    background-position: center top;
+  }
+
+  .geo-hero-slide {
+    top: 12%;
+    right: 4%;
+    width: 48%;
+    height: 70%;
+    border-width: 5px;
+  }
+
+  .geo-hero-slide:nth-child(2) {
+    top: 20%;
+    right: 43%;
+    width: 32%;
+    height: 57%;
+  }
+
+  .geo-hero-slide:nth-child(3) {
+    top: 8%;
+    right: -5%;
+    width: 31%;
+    height: 62%;
   }
 
 

@@ -3,15 +3,20 @@
    Exact copy of akuastrono Contact.css
    ============================================= */
 
-.Heading-contact {
-  font-size: 25px;
-  font-weight: 600;
-}
+.Contact-page { padding: clamp(28px, 5vw, 64px) var(--page-gutter); background: linear-gradient(135deg, #f7f4ea, #eef6f0); }
+.Heading-contact { font-size: clamp(1.7rem, 3vw, 2.4rem); font-weight: 800; color: var(--geo-forest); margin: 0; }
 
 .Contact-box {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  gap: 28px;
+  margin-top: 24px;
+  padding: clamp(20px, 4vw, 42px);
+  border: 1px solid var(--geo-line);
+  border-radius: var(--radius);
+  background: #fffdf8;
+  box-shadow: var(--shadow);
 }
 
 .Text-Box {
@@ -33,23 +38,24 @@
 }
 
 .btn-submit {
-  width: 100px;
-  height: 50px;
+  min-width: 130px;
+  height: 46px;
   margin-top: 30px;
   color: white;
-  background: #2e6b3e;
-  font-size: larger;
+  background: var(--geo-green);
+  border-radius: 7px;
+  font-size: 15px;
+  font-weight: 700;
   cursor: pointer;
   border: none;
 }
 
-input {
+.Contact-page input {
   width: 250px;
   height: 40px;
-}
-
-.Contact-page {
-  padding: 20px;
+  border: 1px solid #cbd8cf;
+  border-radius: 6px;
+  padding: 0 11px;
 }
 
 @media (max-width: 768px) {
@@ -72,7 +78,7 @@ input {
     width: 80%;
     height: 40px;
   }
-  iframe {
+  .Contact-page iframe {
     width: 100%;
     height: auto;
     margin-top: 30px;
@@ -81,7 +87,6 @@ input {
 
 @media (max-width: 480px) {
   .Heading-contact { font-size: 20px; }
-  .Text-Box input  { width: 100%; }
-  .textarea-box input { width: 100%; }
+  .Contact-page .Text-Box input, .Contact-page .textarea-box input { width: 100%; }
   .btn-submit { width: 90%; }
 }

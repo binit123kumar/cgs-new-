@@ -15,7 +15,6 @@ import { getFaculty, fileUrl } from '../api/cmsApi';
 
 // ── Faculty images (hosted on shared CDN / public folder) ──
 // Replace these paths with your actual image locations.
-const directorImg = 'https://akucgs.vercel.app/images/director_img_150.png';
 const facultyImg  = 'https://akucgs.vercel.app/images/faculty.jpg';
 
 function Faculty() {
@@ -27,20 +26,9 @@ function Faculty() {
 
   return (
     <>
-      {/* ── Director ── */}
-      <div className="Faculty-box">
-        <h1>Director</h1>
-        <img src={directorImg} alt="Dr. Poornima Sekhar Singh – Director, CGS" />
-        <h3>Dr. Poornima Sekhar Singh</h3>
-        <h3>Founding Director, Centre for Geographical Studies</h3>
-        <h3>Aryabhatta Knowledge University Campus, Mithapur, Patna-800001</h3>
-        <h3>Email – director@cgspatna.ac.in</h3>
-        <h3>Contact No. – 9471007084</h3>
-      </div>
-
       {/* ── Faculty ── */}
-      {cmsFaculty.length > 0 ? (
-        cmsFaculty.map((f) => (
+      {cmsFaculty.filter((f) => !f.isGuestFaculty && !f.isDirector).length > 0 ? (
+        cmsFaculty.filter((f) => !f.isGuestFaculty && !f.isDirector).map((f) => (
           <div className="Faculty-box" key={f.id}>
             <h1>{f.designation || 'Faculty'}</h1>
             {f.photoPath && <img src={fileUrl(f.photoPath)} alt={f.name} />}

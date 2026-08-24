@@ -57,7 +57,7 @@ const TabNavBar = () => {
       label: 'People',
       dropdownOptions: [
         { label: 'Faculty', link: '/faculty' },
-        { label: 'Guest Faculty', link: '/Staff'},
+        { label: 'Guest Faculty', link: '/staff'},
       ],
     },
 

@@ -8,9 +8,7 @@
   margin-bottom: 20px;
 }
 
-.carousel-root {
-  width: 800px !important;
-}
+.carousel-root { width: 100% !important; }
 
 .carousel .slide {
   background: #fff;
@@ -26,12 +24,12 @@
   color: #333;
 }
 
-.carousel img {
-  width: auto;
-  height: 500px !important;
-  max-height: 500px;
+.campus-carousel .slide img {
+  width: 100%;
+  height: clamp(230px, 38vw, 620px) !important;
+  max-height: none;
   display: block;
-  margin: 0 auto;
+  margin: 0;
   object-fit: cover;
 }
 

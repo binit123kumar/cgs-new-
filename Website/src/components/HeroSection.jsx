@@ -4,6 +4,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import {
   FaChevronDown,
   FaSearch,
+  FaHome,
   FaTimes,
   FaEnvelope,
   FaPhone,
@@ -11,6 +12,7 @@ import {
   FaTwitter,
   FaInstagram,
   FaYoutube,
+  FaBars,
 } from "react-icons/fa";
 
 import {
@@ -19,6 +21,20 @@ import {
   getSettings,
 } from "../api/cmsApi";
 import "../Styles/HeroSection.css";
+import campusBackground from "../assets/pdf/Image-1769067088487.jpeg";
+
+const defaultHeroImage = "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1900&q=85";
+
+// A logo, document screenshot or thumbnail must never be stretched across the
+// hero. Only landscape images large enough for a desktop banner are accepted.
+function isBannerImage(src) {
+  return new Promise((resolve) => {
+    const image = new Image();
+    image.onload = () => resolve(image.naturalWidth >= 1200 && image.naturalHeight >= 400);
+    image.onerror = () => resolve(false);
+    image.src = src;
+  });
+}
 
 
 /* =========================================================
@@ -38,8 +54,7 @@ const menus = [
   {
     label: "ACADEMICS",
     items: [
-      ["M.A./M.Sc. Geography", "/academic-program/ma-msc-geography"],
-      ["Ph.D. in Geography", "/academic-program/phd-geography"],
+      ["All Programmes", "/#programs"],
       [
         "Prospectus 2026-28",
         "/assets/pdf/SGS Prospectus - 2026-28.pdf",
@@ -55,22 +70,6 @@ const menus = [
     ],
   },
 
-  {
-    label: "RESEARCH",
-    items: [
-      ["Research Areas", "/#research"],
-      ["Publications", "/publications"],
-    ],
-  },
-
-  {
-    label: "INFRASTRUCTURE",
-    items: [
-      ["GIS & Remote Sensing Lab", "/about"],
-      ["Library", "/about"],
-      ["Smart Classroom", "/about"],
-    ],
-  },
 ];
 
 
@@ -84,19 +83,16 @@ export default function HeroSection() {
 
   /* Open dropdown menu */
   const [open, setOpen] = useState(null);
+  const [navOpen, setNavOpen] = useState(false);
 
   /* Database Site Settings */
   const [siteSettings, setSiteSettings] = useState(null);
 
   /* Hero image */
-  const [heroImage, setHeroImage] = useState(
-    "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1900&q=85"
-  );
+  const [heroImages, setHeroImages] = useState([{ src: defaultHeroImage, title: 'School of Geography' }]);
+  const [heroStart, setHeroStart] = useState(0);
 
   /* Search text */
-  const [searchText, setSearchText] = useState("");
-  const [searchFocused, setSearchFocused] = useState(false);
-
 
   /* =========================================================
      LOAD DATABASE DATA
@@ -109,20 +105,17 @@ export default function HeroSection() {
        ------------------------------------------------------- */
 
     getSlider()
-      .then((items) => {
-
-        if (
-          items &&
-          items.length > 0 &&
-          items[0]?.imagePath
-        ) {
-
-          setHeroImage(
-            fileUrl(items[0].imagePath)
-          );
-
+      .then(async (items) => {
+        const candidates = (items || []).filter((item) => item?.imagePath);
+        const validImages = [];
+        for (const item of candidates) {
+          const imageUrl = fileUrl(item.imagePath);
+          if (await isBannerImage(imageUrl)) {
+            validImages.push({ src: imageUrl, title: item.title || 'School of Geography' });
+            if (validImages.length === 9) break;
+          }
         }
-
+        setHeroImages(validImages.length ? validImages : [{ src: defaultHeroImage, title: 'School of Geography' }]);
       })
       .catch((error) => {
 
@@ -178,12 +171,23 @@ export default function HeroSection() {
 
   }, []);
 
+  useEffect(() => {
+    if (heroImages.length < 2) return undefined;
+    const timer = window.setInterval(() => setHeroStart((value) => (value + 3) % heroImages.length), 5000);
+    return () => window.clearInterval(timer);
+  }, [heroImages.length]);
+
 
   /* =========================================================
      HOME PAGE CHECK
      ========================================================= */
 
   const isHome = location.pathname === "/";
+
+  useEffect(() => {
+    setOpen(null);
+    setNavOpen(false);
+  }, [location.pathname]);
 
 
   /* =========================================================
@@ -222,32 +226,15 @@ export default function HeroSection() {
     siteSettings?.SiteName ||
     "School of Geography";
 
+  const contactEmail = siteSettings?.email || siteSettings?.Email || "geography@aku.ac.in";
+  const contactPhone = siteSettings?.phone || siteSettings?.Phone || "+91 612 235 0000";
+  const heroDescription = siteSettings?.metaDescription || siteSettings?.MetaDescription ||
+    "We study the diverse environments and spatial patterns that shape our world. Our teaching and research promote sustainable and informed decision-making for a better tomorrow.";
+
 
   /* =========================================================
      SEARCH HANDLER
      ========================================================= */
-
-  const handleSearch = (e) => {
-
-    e.preventDefault();
-
-    const query = searchText.trim();
-
-    if (!query) {
-      return;
-    }
-
-    /*
-      Search page route.
-      If your project already has another search
-      route, change only this line.
-    */
-
-    window.location.href =
-      `/search?q=${encodeURIComponent(query)}`;
-
-  };
-
 
   /* =========================================================
      JSX
@@ -275,14 +262,14 @@ export default function HeroSection() {
 
             <span className="top-email">
               <FaEnvelope />
-              geography@aku.ac.in
+              {contactEmail}
             </span>
 
             <span className="top-divider" />
 
             <span>
               <FaPhone />
-              +91 612 235 0000
+              {contactPhone}
             </span>
 
           </div>
@@ -483,7 +470,21 @@ export default function HeroSection() {
 
       <nav className="main-nav">
 
-        <div className="header-container nav-inner">
+        <div className="header-container mobile-nav-trigger-row">
+          <button
+            type="button"
+            className="mobile-nav-trigger"
+            aria-expanded={navOpen}
+            aria-controls="primary-navigation"
+            onClick={() => setNavOpen((value) => !value)}
+          >
+            {navOpen ? <FaTimes /> : <FaBars />} <span>Menu</span>
+          </button>
+        </div>
+
+        <div id="primary-navigation" className={`header-container nav-inner ${navOpen ? "nav-open" : ""}`} onClick={(event) => {
+          if (event.target.closest('a')) setNavOpen(false);
+        }}>
 
 
           {/* HOME */}
@@ -496,8 +497,11 @@ export default function HeroSection() {
                 isActive ? "active" : ""
               }`
             }
+            aria-label="Home"
+            title="Home"
           >
-            HOME
+            <FaHome />
+            <span className="sr-only">Home</span>
           </NavLink>
 
 
@@ -511,6 +515,8 @@ export default function HeroSection() {
             <div
               className="nav-menu"
               key={menu.label}
+              onMouseEnter={() => setOpen(menu.label)}
+              onMouseLeave={() => setOpen(null)}
             >
 
 
@@ -637,22 +643,6 @@ export default function HeroSection() {
 
 
           <NavLink
-            to="/notices"
-            className="nav-link"
-          >
-            NOTICES
-          </NavLink>
-
-
-          <NavLink
-            to="/events"
-            className="nav-link"
-          >
-            EVENTS
-          </NavLink>
-
-
-          <NavLink
             to="/gallery"
             className="nav-link"
           >
@@ -661,10 +651,10 @@ export default function HeroSection() {
 
 
           <NavLink
-            to="/downloads"
+            to="/infrastructure"
             className="nav-link"
           >
-            DOWNLOADS
+            INFRASTRUCTURE
           </NavLink>
 
 
@@ -680,43 +670,7 @@ export default function HeroSection() {
               SEARCH BAR (in navbar)
               ================================================= */}
 
-          <form
-            className={`header-search ${searchFocused ? "focused" : ""}`}
-            onSubmit={handleSearch}
-          >
-
-            <button
-              type="submit"
-              aria-label="Search"
-              className="header-search-submit"
-            >
-              <FaSearch />
-            </button>
-
-            <input
-              type="search"
-              aria-label="Search"
-              placeholder="Search..."
-              value={searchText}
-              onFocus={() => setSearchFocused(true)}
-              onBlur={() => setSearchFocused(false)}
-              onChange={(e) =>
-                setSearchText(e.target.value)
-              }
-            />
-
-            {searchText && (
-              <button
-                type="button"
-                aria-label="Clear search"
-                className="header-search-clear"
-                onClick={() => setSearchText("")}
-              >
-                <FaTimes />
-              </button>
-            )}
-
-          </form>
+          <Link to="/search" className="nav-link nav-search-icon" aria-label="Search website" title="Search website"><FaSearch /></Link>
 
         </div>
 
@@ -734,19 +688,33 @@ export default function HeroSection() {
         <section
           className="geo-hero"
           style={{
-            "--hero-image": `url(${heroImage})`,
           }}
         >
 
+          <div
+            className="geo-hero-campus-background"
+            style={{
+              backgroundImage: `url(${siteSettings?.heroBackgroundPath || siteSettings?.HeroBackgroundPath
+                ? fileUrl(siteSettings.heroBackgroundPath || siteSettings.HeroBackgroundPath)
+                : campusBackground})`,
+            }}
+            aria-hidden="true"
+          />
 
           {/* Hero overlay */}
 
+          <div className="geo-hero-slides" aria-hidden="true">
+            {[0, 1, 2].map((offset) => {
+              const image = heroImages[(heroStart + offset) % heroImages.length];
+              return <div key={`${image.src}-${offset}`} className="geo-hero-slide" style={{ backgroundImage: `url(${image.src})` }} />;
+            })}
+          </div>
           <div className="geo-hero-overlay" />
 
 
           {/* Hero content */}
 
-          <div className="header-container geo-hero-content">
+          <div className="header-container geo-hero-content hero-fixed-copy">
 
 
             {/* Welcome text */}
@@ -766,11 +734,7 @@ export default function HeroSection() {
             {/* Description */}
 
             <p>
-              We study the diverse environments and
-              spatial patterns that shape our world.
-              Our teaching and research promote
-              sustainable and informed decision-making
-              for a better tomorrow.
+              {heroDescription}
             </p>
 
 
@@ -782,7 +746,7 @@ export default function HeroSection() {
               {/* Programmes */}
 
               <Link
-                to="/academic-program/ma-msc-geography"
+                to="/#programs"
                 className="hero-primary"
               >
                 Explore Programmes

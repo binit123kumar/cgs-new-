@@ -56,7 +56,8 @@ const Carousels = () => {
       interval={5000}
       stopOnHover={true}
       swipeable={true}
-      dynamicHeight={true}
+      dynamicHeight={false}
+      className="campus-carousel"
     >
       {slides.map((slide, index) =>
         slide.linkUrl ? (

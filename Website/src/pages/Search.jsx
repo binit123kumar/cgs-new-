@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   getFaculty,
   getStaff,
@@ -22,8 +22,10 @@ function matches(item, fields, query) {
 
 export default function Search() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const query = (searchParams.get("q") || "").trim();
   const queryLower = query.toLowerCase();
+  const [input, setInput] = useState(query);
 
   const [loading, setLoading] = useState(true);
   const [results, setResults] = useState({
@@ -101,9 +103,26 @@ export default function Search() {
     0
   );
 
+  function submitSearch(event) {
+    event.preventDefault();
+    const value = input.trim();
+    navigate(value ? `/search?q=${encodeURIComponent(value)}` : "/search");
+  }
+
   return (
     <div className="search-page">
       <h1>Search Results</h1>
+
+      <form className="site-search-form" onSubmit={submitSearch}>
+        <input
+          type="search"
+          aria-label="Search the website"
+          placeholder="Search faculty, courses, infrastructure..."
+          value={input}
+          onChange={(event) => setInput(event.target.value)}
+        />
+        <button type="submit">Search</button>
+      </form>
 
       {query ? (
         <p className="search-query-line">

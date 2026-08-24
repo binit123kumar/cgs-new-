@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/static/css/main.88b920d1.css",
+    "main.js": "/static/js/main.c93941f2.js",
+    "static/media/dayanand.png": "/static/media/dayanand.029cd2877cf5daf0341d.png",
+    "static/media/rabindra.png": "/static/media/rabindra.f60e6575ebe158999cb3.png",
+    "static/media/Image-1769067088487.jpeg": "/static/media/Image-1769067088487.c70733fa04f3acc1a327.jpeg",
+    "static/media/angad.png": "/static/media/angad.421bc651eca6fde85293.png",
+    "index.html": "/index.html",
+    "main.88b920d1.css.map": "/static/css/main.88b920d1.css.map",
+    "main.c93941f2.js.map": "/static/js/main.c93941f2.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.88b920d1.css",
+    "static/js/main.c93941f2.js"
+  ]
+}

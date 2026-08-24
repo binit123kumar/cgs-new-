@@ -4,14 +4,14 @@
    ============================================= */
 
 .Faculty-box {
-  width: 800px;
+  width: min(calc(100% - 32px), 880px);
   margin: 0 auto;
   text-align: center;
   padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: #f9f9f9;
+  border: 1px solid var(--geo-line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  background: linear-gradient(145deg, #fffef9, #f4f8f1);
   margin-top: 20px;
   margin-bottom: 20px;
 }
@@ -19,12 +19,13 @@
 .Faculty-box h1 {
   font-size: 24px;
   margin-bottom: 20px;
-  color: #333;
+  color: var(--geo-forest);
 }
 
 .Faculty-box img {
-  width: 20%;
-  height: auto;
+  width: clamp(105px, 18vw, 150px);
+  aspect-ratio: 1;
+  object-fit: cover;
   margin-bottom: 20px;
   border-radius: 8px;
 }
@@ -32,13 +33,13 @@
 .Faculty-box h3 {
   font-size: 18px;
   margin: 10px 0;
-  color: #666;
+  color: var(--geo-muted);
 }
 
 /* Tablet */
 @media (max-width: 768px) {
   .Faculty-box {
-    width: 80%;
+    width: min(calc(100% - 32px), 880px);
     padding: 15px;
   }
   .Faculty-box h1 { font-size: 22px; }
@@ -49,7 +50,7 @@
 /* Mobile */
 @media (max-width: 480px) {
   .Faculty-box {
-    width: 95%;
+    width: calc(100% - 24px);
     padding: 10px;
   }
   .Faculty-box h1 { font-size: 20px; }

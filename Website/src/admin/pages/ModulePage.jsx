@@ -6,10 +6,16 @@ import DataTable from '../components/DataTable';
 import FormModal from '../components/FormModal';
 import ViewDrawer from '../components/ViewDrawer';
 import ConfirmDialog from '../components/ConfirmDialog';
+import { useAuth } from '../context/AuthContext';
 
 export default function ModulePage() {
   const { moduleKey } = useParams();
   const config = modules[moduleKey];
+  const { can } = useAuth();
+  const canRead = can(moduleKey, 'read');
+  const canCreate = can(moduleKey, 'create');
+  const canUpdate = can(moduleKey, 'update');
+  const canDelete = can(moduleKey, 'delete');
 
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -45,6 +51,10 @@ export default function ModulePage() {
     const q = search.toLowerCase();
     return records.filter((r) => JSON.stringify(r).toLowerCase().includes(q));
   }, [records, search]);
+
+  const nextDisplayOrder = useMemo(() => (
+    Math.max(0, ...records.map((record) => Number(record.displayOrder) || 0)) + 1
+  ), [records]);
 
   async function handleSubmit(formData) {
     setSaving(true);
@@ -90,6 +100,7 @@ export default function ModulePage() {
   if (!config) {
     return <div className="empty-state">Module not found.</div>;
   }
+  if (!canRead) return <div className="empty-state"><i className="bi bi-shield-lock" />You do not have access to this section.</div>;
 
   return (
     <>
@@ -98,9 +109,9 @@ export default function ModulePage() {
       </div>
       <div className="page-title-row">
         <h1>{config.label} Management</h1>
-        <button className="btn btn-primary" onClick={() => { setEditingRecord(null); setShowForm(true); }}>
+        {canCreate && <button className="btn btn-primary" onClick={() => { setEditingRecord(null); setShowForm(true); }}>
           <i className="bi bi-plus-lg" /> Add {config.label}
-        </button>
+        </button>}
       </div>
 
       <div className="card-panel">
@@ -127,8 +138,8 @@ export default function ModulePage() {
             config={config}
             records={filtered}
             onView={setViewingRecord}
-            onEdit={(r) => { setEditingRecord(r); setShowForm(true); }}
-            onDelete={setDeletingRecord}
+            onEdit={canUpdate ? (r) => { setEditingRecord(r); setShowForm(true); } : null}
+            onDelete={canDelete ? setDeletingRecord : null}
             onToggleStatus={handleToggleStatus}
           />
         )}
@@ -138,6 +149,7 @@ export default function ModulePage() {
         <FormModal
           config={config}
           record={editingRecord}
+          nextDisplayOrder={nextDisplayOrder}
           saving={saving}
           onClose={() => { setShowForm(false); setEditingRecord(null); }}
           onSubmit={handleSubmit}

@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: cgs-cms-api
+    runtime: docker
+    rootDir: Backend/backend/CGS.CMS.API
+    plan: free
+    healthCheckPath: /api/about
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: Database__EnsureCreated
+        value: "true"
+      - key: ConnectionStrings__DefaultConnection
+        sync: false
+      - key: Jwt__Key
+        sync: false
+      - key: Cors__AllowedOrigins__0
+        sync: false
+      - key: Cloudinary__CloudName
+        sync: false
+      - key: Cloudinary__ApiKey
+        sync: false
+      - key: Cloudinary__ApiSecret
+        sync: false

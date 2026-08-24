@@ -12,7 +12,7 @@
    text color/font for the entire footer (all child elements inherit
    this unless overridden below). */
 .geo-footer {
-  background: #062d16;
+  background: linear-gradient(135deg, #062d16, #0a4221);
   color: #dfe9e0;
   font-family: Inter, Arial, sans-serif;
 }
@@ -26,7 +26,7 @@
 .footer-main {
   width: 100%;
   box-sizing: border-box;
-  padding: 25px clamp(16px, 4vw, 60px) 22px;
+  padding: 48px clamp(24px, 6vw, 90px) 34px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
@@ -55,7 +55,7 @@
   font-size: 14px;
   color: #fff;
   margin: 0 0 7px;
-  letter-spacing: .4px;
+  letter-spacing: .8px;
 }
 
 /* Every plain link inside a footer column (Home, About Us, UGC,
@@ -69,6 +69,9 @@
 .footer-col a:hover {
   color: #cbdc40;
 }
+
+.footer-col a { transition: color .2s ease, transform .2s ease; }
+.footer-col a:hover { transform: translateX(3px); }
 
 
 /* -------------------------------------------------------
@@ -182,12 +185,44 @@
   background: #041f0e;
 }
 
+.footer-live-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 13px clamp(24px, 6vw, 90px) 0;
+  color: #d5dfd6;
+  font-size: 12px;
+}
+
+.footer-date-time {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+
+.footer-visitor-stats {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+
+.footer-live-info span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-live-info svg {
+  color: #bdd52f;
+}
+
 /* Inner row: copyright text (left) + "Designed & Developed by..."
    (right). HORIZONTAL: the two <span> texts sit on opposite ends. */
 .footer-bottom > div {
   width: 100%;
   box-sizing: border-box;
-  padding: 0 clamp(16px, 4vw, 60px);
+  padding: 0 clamp(24px, 6vw, 90px);
   height: 36px;
   display: flex;
   align-items: center;
@@ -214,7 +249,7 @@
    VERTICAL stack (copyright text above, credit text below). */
 @media (max-width: 600px) {
   .footer-main {
-    gap: 10px;
+    gap: 20px;
   }
   .school-footer {
     flex-basis: 100%;
@@ -228,5 +263,19 @@
     gap: 8px;
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .footer-live-info {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 18px;
+  }
+
+  .footer-date-time,
+  .footer-visitor-stats {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px 18px;
   }
 }

@@ -30,23 +30,34 @@ async function getJson(path) {
   }
 }
 
+function valueOf(item, lowerName, upperName) {
+  return item?.[lowerName] ?? item?.[upperName];
+}
+
 // Only return records that are Active, sorted by displayOrder (backend already
 // sorts, but we defensively re-sort in case items were toggled recently).
 function activeSorted(list) {
   if (!Array.isArray(list)) return [];
   return list
-    .filter((x) => x.isActive)
-    .sort((a, b) => (a.displayOrder ?? 0) - (b.displayOrder ?? 0));
+    .filter((x) => valueOf(x, 'isActive', 'IsActive') !== false)
+    .sort((a, b) => (valueOf(a, 'displayOrder', 'DisplayOrder') ?? 0) - (valueOf(b, 'displayOrder', 'DisplayOrder') ?? 0));
 }
 
 export async function getAbout() {
   const data = await getJson('/about');
-  return activeSorted(data).filter((a) => a.showOnAboutPage);
+  return activeSorted(data).filter((a) => valueOf(a, 'showOnAboutPage', 'ShowOnAboutPage') !== false);
 }
 
 export async function getFaculty() {
   const data = await getJson('/faculty');
   return activeSorted(data);
+}
+
+// Guest faculty are managed in the Faculty module using the Guest Faculty
+// checkbox. Keeping this as a derived list avoids duplicate CMS entries.
+export async function getGuestFaculty() {
+  const faculty = await getFaculty();
+  return faculty.filter((member) => valueOf(member, 'isGuestFaculty', 'IsGuestFaculty') === true || valueOf(member, 'isGuestFaculty', 'IsGuestFaculty') === 'true');
 }
 
 export async function getStaff() {

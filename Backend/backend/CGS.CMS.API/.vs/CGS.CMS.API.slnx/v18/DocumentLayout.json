@@ -1,0 +1,173 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\v\\cgs\\Backend\\backend\\CGS.CMS.API\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{602F9350-A328-9BC3-82B2-CA28A94C89C6}|CGS.CMS.API.csproj|d:\\v\\cgs\\backend\\backend\\cgs.cms.api\\controllers\\aimobjectivecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{602F9350-A328-9BC3-82B2-CA28A94C89C6}|CGS.CMS.API.csproj|solutionrelative:controllers\\aimobjectivecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{602F9350-A328-9BC3-82B2-CA28A94C89C6}|CGS.CMS.API.csproj|d:\\v\\cgs\\backend\\backend\\cgs.cms.api\\dtos\\authdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{602F9350-A328-9BC3-82B2-CA28A94C89C6}|CGS.CMS.API.csproj|solutionrelative:dtos\\authdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{602F9350-A328-9BC3-82B2-CA28A94C89C6}|CGS.CMS.API.csproj|d:\\v\\cgs\\backend\\backend\\cgs.cms.api\\controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{602F9350-A328-9BC3-82B2-CA28A94C89C6}|CGS.CMS.API.csproj|solutionrelative:controllers\\dashboardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{602F9350-A328-9BC3-82B2-CA28A94C89C6}|CGS.CMS.API.csproj|d:\\v\\cgs\\backend\\backend\\cgs.cms.api\\cgs.cms.api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{602F9350-A328-9BC3-82B2-CA28A94C89C6}|CGS.CMS.API.csproj|solutionrelative:cgs.cms.api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{602F9350-A328-9BC3-82B2-CA28A94C89C6}|CGS.CMS.API.csproj|d:\\v\\cgs\\backend\\backend\\cgs.cms.api\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{602F9350-A328-9BC3-82B2-CA28A94C89C6}|CGS.CMS.API.csproj|solutionrelative:data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{602F9350-A328-9BC3-82B2-CA28A94C89C6}|CGS.CMS.API.csproj|d:\\v\\cgs\\backend\\backend\\cgs.cms.api\\controllers\\aboutcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{602F9350-A328-9BC3-82B2-CA28A94C89C6}|CGS.CMS.API.csproj|solutionrelative:controllers\\aboutcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{602F9350-A328-9BC3-82B2-CA28A94C89C6}|CGS.CMS.API.csproj|d:\\v\\cgs\\backend\\backend\\cgs.cms.api\\models\\entities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{602F9350-A328-9BC3-82B2-CA28A94C89C6}|CGS.CMS.API.csproj|solutionrelative:models\\entities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{602F9350-A328-9BC3-82B2-CA28A94C89C6}|CGS.CMS.API.csproj|d:\\v\\cgs\\backend\\backend\\cgs.cms.api\\controllers\\gallerycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{602F9350-A328-9BC3-82B2-CA28A94C89C6}|CGS.CMS.API.csproj|solutionrelative:controllers\\gallerycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{602F9350-A328-9BC3-82B2-CA28A94C89C6}|CGS.CMS.API.csproj|d:\\v\\cgs\\backend\\backend\\cgs.cms.api\\controllers\\newscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{602F9350-A328-9BC3-82B2-CA28A94C89C6}|CGS.CMS.API.csproj|solutionrelative:controllers\\newscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AimObjectiveController.cs",
+              "DocumentMoniker": "D:\\v\\cgs\\Backend\\backend\\CGS.CMS.API\\Controllers\\AimObjectiveController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AimObjectiveController.cs",
+              "ToolTip": "D:\\v\\cgs\\Backend\\backend\\CGS.CMS.API\\Controllers\\AimObjectiveController.cs",
+              "RelativeToolTip": "Controllers\\AimObjectiveController.cs",
+              "ViewState": "AgIAAD8AAAAAAAAAAAAgwFcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-23T11:11:35.396Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AuthDtos.cs",
+              "DocumentMoniker": "D:\\v\\cgs\\Backend\\backend\\CGS.CMS.API\\DTOs\\AuthDtos.cs",
+              "RelativeDocumentMoniker": "DTOs\\AuthDtos.cs",
+              "ToolTip": "D:\\v\\cgs\\Backend\\backend\\CGS.CMS.API\\DTOs\\AuthDtos.cs",
+              "RelativeToolTip": "DTOs\\AuthDtos.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAA1wCMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-23T11:05:49.55Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DashboardController.cs",
+              "DocumentMoniker": "D:\\v\\cgs\\Backend\\backend\\CGS.CMS.API\\Controllers\\DashboardController.cs",
+              "RelativeDocumentMoniker": "Controllers\\DashboardController.cs",
+              "ToolTip": "D:\\v\\cgs\\Backend\\backend\\CGS.CMS.API\\Controllers\\DashboardController.cs",
+              "RelativeToolTip": "Controllers\\DashboardController.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAgwCgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-23T11:05:05.301Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "D:\\v\\cgs\\Backend\\backend\\CGS.CMS.API\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "Data\\ApplicationDbContext.cs",
+              "ToolTip": "D:\\v\\cgs\\Backend\\backend\\CGS.CMS.API\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "Data\\ApplicationDbContext.cs",
+              "ViewState": "AgIAACkAAAAAAAAAAAAcwDcAAABJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-23T11:02:31.65Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "GalleryController.cs",
+              "DocumentMoniker": "D:\\v\\cgs\\Backend\\backend\\CGS.CMS.API\\Controllers\\GalleryController.cs",
+              "RelativeDocumentMoniker": "Controllers\\GalleryController.cs",
+              "ToolTip": "D:\\v\\cgs\\Backend\\backend\\CGS.CMS.API\\Controllers\\GalleryController.cs",
+              "RelativeToolTip": "Controllers\\GalleryController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-23T10:58:45.396Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "NewsController.cs",
+              "DocumentMoniker": "D:\\v\\cgs\\Backend\\backend\\CGS.CMS.API\\Controllers\\NewsController.cs",
+              "RelativeDocumentMoniker": "Controllers\\NewsController.cs",
+              "ToolTip": "D:\\v\\cgs\\Backend\\backend\\CGS.CMS.API\\Controllers\\NewsController.cs",
+              "RelativeToolTip": "Controllers\\NewsController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-23T10:58:45.306Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AboutController.cs",
+              "DocumentMoniker": "D:\\v\\cgs\\Backend\\backend\\CGS.CMS.API\\Controllers\\AboutController.cs",
+              "RelativeDocumentMoniker": "Controllers\\AboutController.cs",
+              "ToolTip": "D:\\v\\cgs\\Backend\\backend\\CGS.CMS.API\\Controllers\\AboutController.cs",
+              "RelativeToolTip": "Controllers\\AboutController.cs",
+              "ViewState": "AgIAAGoAAAAAAAAAAAAcwHwAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-23T10:58:45.18Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Entities.cs",
+              "DocumentMoniker": "D:\\v\\cgs\\Backend\\backend\\CGS.CMS.API\\Models\\Entities.cs",
+              "RelativeDocumentMoniker": "Models\\Entities.cs",
+              "ToolTip": "D:\\v\\cgs\\Backend\\backend\\CGS.CMS.API\\Models\\Entities.cs",
+              "RelativeToolTip": "Models\\Entities.cs",
+              "ViewState": "AgIAAGUBAAAAAAAAAAAcwIcBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-23T10:58:42.704Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "CGS.CMS.API.csproj",
+              "DocumentMoniker": "D:\\v\\cgs\\Backend\\backend\\CGS.CMS.API\\CGS.CMS.API.csproj",
+              "RelativeDocumentMoniker": "CGS.CMS.API.csproj",
+              "ToolTip": "D:\\v\\cgs\\Backend\\backend\\CGS.CMS.API\\CGS.CMS.API.csproj",
+              "RelativeToolTip": "CGS.CMS.API.csproj",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAEwBgAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-08-20T23:04:42.951Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

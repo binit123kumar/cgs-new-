@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { fileUrl } from '../api/client';
 
-function buildInitialState(fields, record) {
+function buildInitialState(fields, record, nextDisplayOrder) {
   const state = {};
   fields.forEach((f) => {
     if (f.type === 'file') return; // files handled separately
@@ -11,16 +11,19 @@ function buildInitialState(fields, record) {
         state[f.name] = String(state[f.name]).slice(0, 10); // yyyy-MM-dd for <input type=date>
       }
     } else {
-      state[f.name] = f.default === 'today' ? new Date().toISOString().slice(0, 10) : (f.default ?? (f.type === 'checkbox' ? false : ''));
+      state[f.name] = f.name === 'displayOrder'
+        ? nextDisplayOrder
+        : f.default === 'today' ? new Date().toISOString().slice(0, 10) : (f.default ?? (f.type === 'checkbox' ? false : ''));
     }
   });
   return state;
 }
 
-export default function FormModal({ config, record, onClose, onSubmit, saving }) {
+export default function FormModal({ config, record, onClose, onSubmit, saving, nextDisplayOrder }) {
   const isEdit = !!record;
-  const [values, setValues] = useState(() => buildInitialState(config.fields, record));
+  const [values, setValues] = useState(() => buildInitialState(config.fields, record, nextDisplayOrder));
   const [files, setFiles] = useState({});
+  const [removeImage, setRemoveImage] = useState(false);
   const [error, setError] = useState('');
 
   function handleChange(field, val) {
@@ -48,9 +51,16 @@ export default function FormModal({ config, record, onClose, onSubmit, saving })
     }
 
     const formData = new FormData();
+    if (removeImage && config.imageField) formData.append('removeImage', 'true');
     config.fields.forEach((f) => {
       if (f.type === 'file') {
-        if (files[f.name]) formData.append(f.name, files[f.name]);
+        if (files[f.name]) {
+          const selectedFiles = f.multiple ? Array.from(files[f.name]) : [files[f.name]];
+          selectedFiles.forEach((file) => formData.append(f.name, file));
+          // Preserve compatibility with the existing single-image gallery API
+          // while the backend is upgraded to consume the repeated `images` field.
+          if (f.name === 'images' && selectedFiles[0]) formData.append('image', selectedFiles[0]);
+        }
       } else if (f.type === 'checkbox') {
         formData.append(f.name, values[f.name] ? 'true' : 'false');
       } else {
@@ -73,10 +83,10 @@ export default function FormModal({ config, record, onClose, onSubmit, saving })
   const currentImagePath = record && (config.imageField ? record[config.imageField] : config.fileField ? record[config.fileField] : null);
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-overlay" role="presentation">
+      <div className="modal-box" role="dialog" aria-modal="true" aria-labelledby="form-modal-title">
         <div className="modal-header">
-          <h3>{isEdit ? `Edit ${config.label}` : `Add ${config.label}`}</h3>
+          <h3 id="form-modal-title">{isEdit ? `Edit ${config.label}` : `Add ${config.label}`}</h3>
           <button className="modal-close" onClick={onClose}><i className="bi bi-x-lg" /></button>
         </div>
         <form onSubmit={handleSubmit}>
@@ -91,6 +101,8 @@ export default function FormModal({ config, record, onClose, onSubmit, saving })
                   onChange={(v) => handleChange(f.name, v)}
                   onFile={(file) => handleFile(f.name, file)}
                   currentImagePath={f.type === 'file' ? currentImagePath : null}
+                  removeImage={removeImage}
+                  onRemoveImage={setRemoveImage}
                 />
               ))}
 
@@ -125,7 +137,7 @@ export default function FormModal({ config, record, onClose, onSubmit, saving })
   );
 }
 
-function FieldInput({ field, value, onChange, onFile, currentImagePath }) {
+function FieldInput({ field, value, onChange, onFile, currentImagePath, removeImage, onRemoveImage }) {
   const wrapClass = `form-group${field.full ? ' full' : ''}`;
 
   if (field.type === 'checkbox') {
@@ -144,9 +156,12 @@ function FieldInput({ field, value, onChange, onFile, currentImagePath }) {
       <div className={wrapClass}>
         <label>{field.label}{field.requiredOnCreate && <span className="req"> *</span>}</label>
         {field.image && currentImagePath && (
-          <img src={fileUrl(currentImagePath)} alt="" className="img-preview" />
+          <>
+            {!removeImage && <img src={fileUrl(currentImagePath)} alt="" className="img-preview" />}
+            <label className="checkbox-row"><input type="checkbox" checked={removeImage} onChange={(e) => onRemoveImage(e.target.checked)} /> Remove current image</label>
+          </>
         )}
-        <input type="file" onChange={(e) => onFile(e.target.files[0])} />
+        <input type="file" multiple={field.multiple} accept={field.accept || (field.image ? 'image/*' : undefined)} onChange={(e) => onFile(field.multiple ? e.target.files : e.target.files[0])} />
         {field.hint && <span className="hint">{field.hint}</span>}
       </div>
     );

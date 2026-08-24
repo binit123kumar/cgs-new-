@@ -36,6 +36,11 @@ export default function SettingsPage() {
   const [universityLogoPath, setUniversityLogoPath] = useState(null);
   const [universityLogoFile, setUniversityLogoFile] = useState(null);
 
+  // Fixed public hero background
+  const [heroBackgroundPath, setHeroBackgroundPath] = useState(null);
+  const [heroBackgroundFile, setHeroBackgroundFile] = useState(null);
+  const [heroBackgrounds, setHeroBackgrounds] = useState([]);
+
   // Page state
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -105,6 +110,13 @@ export default function SettingsPage() {
           data.UniversityLogoPath ||
           null
         );
+
+        setHeroBackgroundPath(
+          data.heroBackgroundPath ||
+          data.HeroBackgroundPath ||
+          null
+        );
+        setHeroBackgrounds(data.heroBackgrounds || data.HeroBackgrounds || []);
 
 
       } catch (error) {
@@ -206,6 +218,10 @@ export default function SettingsPage() {
 
       }
 
+      if (heroBackgroundFile) {
+        fd.append('heroBackground', heroBackgroundFile);
+      }
+
 
       // ---------------------------------------------------
       // API Request
@@ -247,6 +263,13 @@ export default function SettingsPage() {
         null
       );
 
+      setHeroBackgroundPath(
+        savedData.heroBackgroundPath ||
+        savedData.HeroBackgroundPath ||
+        null
+      );
+      setHeroBackgrounds(savedData.heroBackgrounds || savedData.HeroBackgrounds || []);
+
 
       setMessage(
         'Settings saved successfully.'
@@ -256,6 +279,7 @@ export default function SettingsPage() {
       // Clear selected files
       setLogoFile(null);
       setUniversityLogoFile(null);
+      setHeroBackgroundFile(null);
 
 
     } catch (err) {
@@ -276,6 +300,26 @@ export default function SettingsPage() {
 
     }
 
+  }
+
+  async function toggleHeroBackground(image) {
+    try {
+      const res = await client.patch(`/settings/hero-backgrounds/${image.id}/toggle`);
+      const data = res.data.data || {};
+      const updatedList = data.heroBackgrounds || data.HeroBackgrounds;
+      if (updatedList) {
+        setHeroBackgrounds(updatedList);
+      } else {
+        setHeroBackgrounds((current) => current.map((item) => (
+          item.id === image.id ? { ...item, isActive: !item.isActive } : item
+        )));
+      }
+      if (data.heroBackgroundPath || data.HeroBackgroundPath) {
+        setHeroBackgroundPath(data.heroBackgroundPath || data.HeroBackgroundPath);
+      }
+    } catch (err) {
+      setMessage(err?.response?.data?.message || 'Could not update hero image visibility.');
+    }
   }
 
 
@@ -471,6 +515,60 @@ export default function SettingsPage() {
 
               </div>
 
+
+              {/* =================================================
+                  SITE NAME
+                  ================================================= */}
+
+              <div className="form-group full">
+                <label>Fixed Hero Background Image</label>
+                {heroBackgroundPath && (
+                  <div style={{ marginBottom: '10px' }}>
+                    <img
+                      src={fileUrl(heroBackgroundPath)}
+                      alt="Fixed hero background"
+                      className="img-preview"
+                    />
+                  </div>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => setHeroBackgroundFile(e.target.files?.[0] || null)}
+                />
+                <span className="hint">Shown behind the public home page text.</span>
+              </div>
+
+              {heroBackgrounds.length > 0 && (
+                <div className="form-group full">
+                  <label>Uploaded Hero Background Images</label>
+                  <div className="settings-image-table-wrap">
+                    <table className="settings-image-table">
+                      <thead>
+                        <tr><th>Preview</th><th>Image</th><th>Show</th></tr>
+                      </thead>
+                      <tbody>
+                        {heroBackgrounds.map((image) => (
+                          <tr key={image.id || image.imagePath}>
+                            <td><img src={fileUrl(image.imagePath || image.path)} alt="" /></td>
+                            <td>{image.fileName || image.name || image.imagePath || image.path}</td>
+                            <td>
+                              <label className="checkbox-row">
+                                <input
+                                  type="checkbox"
+                                  checked={!!image.isActive}
+                                  onChange={() => toggleHeroBackground(image)}
+                                />
+                                Active
+                              </label>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
 
               {/* =================================================
                   SITE NAME

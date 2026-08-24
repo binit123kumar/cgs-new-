@@ -46,3 +46,16 @@
 .search-section a:hover {
   text-decoration: underline;
 }
+
+@media (max-width: 600px) {
+  .search-page {
+    padding: 24px 14px 40px;
+  }
+  .search-page h1 {
+    font-size: 1.5em;
+  }
+}
+
+.site-search-form { display: flex; max-width: 620px; margin: 18px auto 28px; gap: 8px; }
+.site-search-form input { flex: 1; min-width: 0; padding: 12px 14px; border: 1px solid var(--geo-line); border-radius: 6px; background: #fff; }
+.site-search-form button { border: 0; border-radius: 6px; padding: 0 18px; background: var(--geo-forest); color: #fff; font-weight: 700; cursor: pointer; }

@@ -1,21 +1,36 @@
 /**
  * Contact.jsx  –  CGS (Centre for Geographical Studies)
  *
- * STRUCTURE: Identical to akuastrono Contact.jsx
- *   - Google Maps embed (AKU/CGS campus)
- *   - Contact details card
- *
- * DATA CHANGED: CGS phone, email, address
+ * Address / Phone / Email now come from the CMS Settings module
+ * (Admin -> Settings) instead of being hardcoded, so editing them
+ * there updates this page automatically.
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getSettings } from '../api/cmsApi';
 import '../Styles/Contact.css';
 
 function Contact() {
+  const [settings, setSettings] = useState(null);
+
+  useEffect(() => {
+    getSettings()
+      .then(setSettings)
+      .catch(() => setSettings(null));
+  }, []);
+
+  const siteName = settings?.siteName || settings?.SiteName || 'School of Geography';
+  const address =
+    settings?.address ||
+    settings?.Address ||
+    'Aryabhatta Knowledge University Campus, Mithapur, Patna - 800001, Bihar (India)';
+  const phone = settings?.phone || settings?.Phone || '+91 612 235 0000';
+  const email = settings?.email || settings?.Email || 'geography@aku.ac.in';
+
   return (
     <div className="Contact-page">
 
-      {/* ── Map Section ── */}
+      {/* Map Section */}
       <div
         className="Contact-box"
         style={{ display: 'flex', justifyContent: 'center', padding: '20px' }}
@@ -32,21 +47,16 @@ function Contact() {
         />
       </div>
 
-      {/* ── Contact Details Card ── */}
+      {/* Contact Details Card */}
       <div
         className="Faculty-box"
         style={{ padding: '20px', textAlign: 'center' }}
       >
         <h2>Contact Us</h2>
-        <h3>Centre for Geographical Studies</h3>
-        <h3>
-          Ground Floor, Centres of Excellence Building,
-          Aryabhatta Knowledge University Campus,
-          Mithapur, Patna – 800001, Bihar (India)
-        </h3>
-        <h3>Phone – 0612-2952752</h3>
-        <h3>Email – support@cgspatna.ac.in</h3>
-        <h3>Admin Portal – <a href="http://cgspatna.ac.in/administration/" target="_blank" rel="noopener noreferrer">cgspatna.ac.in/administration</a></h3>
+        <h3>{siteName}</h3>
+        <h3>{address}</h3>
+        <h3>Phone - {phone}</h3>
+        <h3>Email - {email}</h3>
       </div>
 
     </div>

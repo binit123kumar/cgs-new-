@@ -86,12 +86,8 @@ export default function DataTable({ config, records, onView, onEdit, onDelete, o
                 <button className="action-btn action-view" title="View" onClick={() => onView(r)}>
                   <i className="bi bi-eye" />
                 </button>
-                <button className="action-btn action-edit" title="Edit" onClick={() => onEdit(r)}>
-                  <i className="bi bi-pencil" />
-                </button>
-                <button className="action-btn action-delete" title="Delete" onClick={() => onDelete(r)}>
-                  <i className="bi bi-trash" />
-                </button>
+                {onEdit && <button className="action-btn action-edit" title="Edit" onClick={() => onEdit(r)}><i className="bi bi-pencil" /></button>}
+                {onDelete && <button className="action-btn action-delete" title="Delete" onClick={() => onDelete(r)}><i className="bi bi-trash" /></button>}
               </td>
             </tr>
           ))}

@@ -6,6 +6,8 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import ModulePage from './pages/ModulePage';
 import SettingsPage from './pages/SettingsPage';
+import ActivityLog from './pages/ActivityLog';
+import AdminUsers from './pages/AdminUsers';
 import './admin.css';
 
 // Mounted at /admin/* by the main site's <App />. All CSS below is scoped
@@ -27,6 +29,8 @@ export default function AdminApp() {
           >
             <Route index element={<Dashboard />} />
             <Route path="settings" element={<SettingsPage />} />
+            <Route path="activity-log" element={<ActivityLog />} />
+            <Route path="admin-users" element={<AdminUsers />} />
             <Route path=":moduleKey" element={<ModulePage />} />
           </Route>
         </Routes>

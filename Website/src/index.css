@@ -1,1 +1,11 @@
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,Arial,sans-serif;background:#fff;color:#1e3025}button,input{font:inherit}img{max-width:100%}.App{text-align:left}a{outline:none}::selection{background:#bfd636;color:#073117}
+:root { --geo-forest: #0a3d23; --geo-green: #17663a; --geo-river: #176b87; --geo-sand: #f5f1e6; --geo-gold: #c99a3e; --geo-ink: #173127; --geo-muted: #627168; --geo-line: #dfe7df; --page-width: 1180px; --page-gutter: clamp(18px, 4vw, 64px); --radius: 14px; --shadow: 0 12px 32px rgba(15, 58, 31, .10); }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; font-family: Inter, Arial, sans-serif; background: #fff; color: var(--geo-ink); }
+button, input, textarea, select { font: inherit; }
+img { max-width: 100%; }
+.App { text-align: left; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid #d5ae4e; outline-offset: 3px; }
+::selection { background: #bfd636; color: #073117; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }

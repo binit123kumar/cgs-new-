@@ -24,8 +24,14 @@ export function AuthProvider({ children }) {
     setUser(null);
   }
 
+  function can(module, action = 'read') {
+    if (!user) return false;
+    if (String(user.role).toLowerCase() === 'super admin') return true;
+    return user.permissions?.[module]?.includes(action) || false;
+  }
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, login, logout, can, isAuthenticated: !!user }}>
       {children}
     </AuthContext.Provider>
   );

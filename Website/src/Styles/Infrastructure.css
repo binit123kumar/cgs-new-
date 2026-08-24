@@ -1,0 +1,10 @@
+.infrastructure-page { padding: clamp(36px, 6vw, 80px) var(--page-gutter); background: linear-gradient(145deg, #f7fbf2, #eef5e8); min-height: 500px; }
+.infrastructure-heading { max-width: 760px; margin: 0 auto 36px; text-align: center; }
+.infrastructure-heading h1 { margin: 10px 0; color: var(--geo-forest); font: 700 clamp(2rem, 5vw, 3.4rem)/1.05 Georgia, serif; }
+.infrastructure-heading p { color: var(--geo-muted); font-size: 1.05rem; }
+.infrastructure-grid { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
+.infrastructure-card { position: relative; padding: 26px 22px 30px; min-height: 210px; background: #fffef9; border: 1px solid var(--geo-line); border-radius: 8px; box-shadow: var(--shadow); }
+.infrastructure-icon { color: var(--geo-green); font-size: 30px; }
+.infrastructure-card h2 { margin: 22px 0 10px; color: var(--geo-forest); font-size: 1.15rem; }
+.infrastructure-card p { margin: 0; color: var(--geo-muted); line-height: 1.6; }
+.infrastructure-link { position: absolute; right: 22px; bottom: 20px; color: var(--geo-gold); }

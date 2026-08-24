@@ -28,11 +28,17 @@ function formatDate(value) {
   return { day: d.getDate(), month: d.toLocaleString('en-IN', { month: 'short' }).toUpperCase() };
 }
 
+function excerpt(value, wordLimit = 38) {
+  const words = String(value || '').trim().split(/\s+/).filter(Boolean);
+  return words.length > wordLimit ? `${words.slice(0, wordLimit).join(' ')}...` : words.join(' ');
+}
+
 export default function Home() {
   const [data, setData] = useState({
     slides: fallback.slides, about: [], courses: fallback.courses, faculty: [],
     news: [], notices: [], events: [], gallery: []
   });
+  const [showAllPrograms, setShowAllPrograms] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -59,15 +65,30 @@ export default function Home() {
   const faculty = data.faculty.slice(0, 4);
   const news = [...data.notices, ...data.news].slice(0, 4);
   const events = data.events.slice(0, 4);
-  const gallery = data.gallery.slice(0, 6);
+  const gallery = Object.values(data.gallery.reduce((groups, item) => {
+    const category = item.category?.trim() || `photo-${item.id}`;
+    groups[category] = groups[category] || [];
+    groups[category].push(item);
+    return groups;
+  }, {})).map((photos) => photos.find((photo) => photo.isPrimary) || photos[0]).slice(0, 6);
 
-  const researchAreas = [
+  const newsHref = (item) => item.linkUrl || item.filePath ? (item.linkUrl || fileUrl(item.filePath)) : '/notices';
+  const isExternalHref = (href) => /^https?:\/\//i.test(href);
+
+  const defaultResearchAreas = [
     [FaMapMarkedAlt, 'GIS & Remote Sensing', 'Spatial analysis and geospatial solutions'],
     [FaCity, 'Urban Geography', 'Sustainable cities and urban planning'],
     [FaLeaf, 'Environmental Geography', 'Climate, resources and ecosystem studies'],
     [FaPeopleArrows, 'Population Geography', 'Demography, migration and human dynamics'],
     [FaBuilding, 'Regional Planning', 'Regional development and spatial planning'],
   ];
+
+  const researchAreas = data.about.filter((entry) => /research|gis|urban|environment|population|planning/i.test(entry.title || '')).length > 0
+    ? data.about
+      .filter((entry) => /research|gis|urban|environment|population|planning/i.test(entry.title || ''))
+      .slice(0, 5)
+      .map((entry, index) => [[FaMapMarkedAlt, FaCity, FaLeaf, FaPeopleArrows, FaBuilding][index], entry.title, entry.description])
+    : defaultResearchAreas;
 
   const stats = [
     [FaGraduationCap, `${data.courses.length}+`, 'Academic Programmes'],
@@ -95,12 +116,12 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="programs-section header-container">
+      <section id="programs" className="programs-section header-container">
         <div className="center-heading">
           <h2>ACADEMIC PROGRAMMES</h2><span />
         </div>
         <div className="program-grid">
-          {data.courses.map((course, index) => (
+          {(showAllPrograms ? data.courses : data.courses.slice(0, 4)).map((course, index) => (
             <article className="program-card" key={course.id || course.name || index}>
               <div className="program-image">
                 <img src={course.imagePath ? fileUrl(course.imagePath) : (course.image || fallback.courses[index % fallback.courses.length].image)} alt={course.name} />
@@ -108,13 +129,22 @@ export default function Home() {
               </div>
               <div className="program-body">
                 <h3>{course.name}</h3>
-                <p>{course.description || course.eligibility || 'Geography programme'}</p>
+                <p>{excerpt(course.description || course.eligibility || 'Geography programme')}</p>
                 <small>{course.duration || 'Programme'}</small>
-                <Link to={`/academic-program/${index === 2 ? 'phd-geography' : 'ma-msc-geography'}`}>View Details <FaArrowRight /></Link>
+                <Link to={`/academic-program/${course.id ?? index}`}>View Details <FaArrowRight /></Link>
               </div>
             </article>
           ))}
         </div>
+        {data.courses.length > 4 && (
+          <button
+            type="button"
+            className="program-more-button"
+            onClick={() => setShowAllPrograms((isShown) => !isShown)}
+          >
+            {showAllPrograms ? 'Less' : 'More'} <FaArrowRight />
+          </button>
+        )}
       </section>
 
       <section id="research" className="research-band">
@@ -136,7 +166,7 @@ export default function Home() {
               { name: 'Dr. A. K. Singh', designation: 'Professor & Head', qualification: 'Physical Geography', photoPath: '/uploads/faculty/328f98392bb74bb5a35d2402127ada14.jpeg' },
               { name: 'Dr. P. Kumari', designation: 'Associate Professor', qualification: 'Human Geography', photoPath: '/uploads/faculty/cf7a1897e5724983b2d50d7656a9c23f.jpeg' },
             ]).map((person, i) => (
-              <div className="faculty-card" key={person.id || person.name || i}>
+              <div className="home-faculty-card" key={person.id || person.name || i}>
                 <img src={person.photoPath ? fileUrl(person.photoPath) : 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=400&q=80'} alt={person.name} />
                 <div className="faculty-info"><strong>{person.name}</strong><span>{person.designation || 'Faculty'}</span><small>{person.qualification || 'Geography'}</small></div>
               </div>
@@ -154,11 +184,11 @@ export default function Home() {
               { title: 'Seminar on “Climate Change and Sustainable Future”', noticeDate: '2026-05-01' },
             ]).map((item, i) => {
               const date = formatDate(item.noticeDate || item.publishDate);
-              return <Link to="/events" className="notice-row" key={item.id || i}>
-                <span className="date-box"><b>{date.day}</b><small>{date.month}</small></span>
-                <span className="notice-title">{item.title}</span>
-                {i === 1 && <em>NEW</em>}
-              </Link>;
+              const href = newsHref(item);
+              const content = <><span className="date-box"><b>{date.day}</b><small>{date.month}</small></span><span className="notice-title">{item.title}</span>{i === 1 && <em>NEW</em>}</>;
+              return isExternalHref(href)
+                ? <a href={href} target="_blank" rel="noreferrer" className="notice-row" key={item.id || i}>{content}</a>
+                : <Link to={href} className="notice-row" key={item.id || i}>{content}</Link>;
             })}
           </div>
         </div>
@@ -183,11 +213,11 @@ export default function Home() {
       </section>
 
       <section className="gallery-section header-container">
-        <div className="section-heading-row"><h2>PHOTO GALLERY</h2><Link to="/events">View Gallery <FaArrowRight /></Link></div>
+        <div className="section-heading-row"><h2>PHOTO GALLERY</h2><Link to="/gallery">View Gallery <FaArrowRight /></Link></div>
         <div className="gallery-strip">
           {(gallery.length ? gallery : fallback.slides.concat(fallback.slides)).slice(0, 6).map((item, i) => {
             const src = item.imagePath ? fileUrl(item.imagePath) : item.src;
-            return <Link to="/events" className="gallery-thumb" key={item.id || i}><img src={src} alt={item.title || item.alt || 'Geography gallery'} /><span><FaImages /></span></Link>;
+            return <Link to="/gallery" className="gallery-thumb" key={item.id || i}><img src={src} alt={item.category || item.title || item.alt || 'Geography gallery'} /><span><FaImages /></span></Link>;
           })}
         </div>
       </section>

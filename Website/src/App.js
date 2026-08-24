@@ -22,6 +22,7 @@ import Notices from "./pages/Notices";
 import Downloads from "./pages/Downloads";
 import Gallery from "./pages/Gallery";
 import Publications from "./pages/Publications";
+import Infrastructure from "./pages/Infrastructure";
 
 // Admin panel (fully self-contained, own header/sidebar — no public
 // site chrome around it)
@@ -43,6 +44,7 @@ function PublicSite() {
           <Route path="/faculty" element={<Faculty />} />
           <Route path="/aim-and-objective" element={<AimAndObjective />} />
           <Route path="/events" element={<Event />} />
+          <Route path="/infrastructure" element={<Infrastructure />} />
           <Route path="/director-message" element={<DirectorMessage />} />
           <Route path="/academic-program/:programId" element={<AcademicProgram />} />
           <Route path="/staff" element={<Staff />} />

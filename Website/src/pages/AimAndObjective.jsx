@@ -5,16 +5,35 @@
  * DATA CHANGED: CGS mission, vision, and objectives
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../Styles/Aim.css';
+import { getAbout } from '../api/cmsApi';
 
 function AimAndObjective() {
+  const [entries, setEntries] = useState([]);
+
+  useEffect(() => {
+    getAbout().then(setEntries);
+  }, []);
+
+  const cmsEntries = entries.filter((entry) =>
+    /aim|objective|vision|mission/i.test(entry.title || '')
+  );
+
   return (
     <div className="AimdBox">
       <h1 className="main-heading">Aim and Objective</h1>
       <hr className="heading-underline" />
 
       <div className="AimContent">
+        {cmsEntries.length > 0 && cmsEntries.map((entry) => (
+          <section key={entry.id}>
+            <h2>{entry.title}</h2>
+            <p>{entry.description}</p>
+          </section>
+        ))}
+
+        {cmsEntries.length === 0 && <>
 
         <h2>Aim</h2>
         <p>
@@ -80,6 +99,7 @@ function AimAndObjective() {
           across Bihar and the broader Eastern India region.
         </p>
 
+        </>}
       </div>
     </div>
   );

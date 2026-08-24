@@ -1,14 +1,20 @@
 /**
- * HomeButton.jsx  –  CGS
- * Fixed bottom-left scroll-to-top button.
- * Exact structure as akuastrono.
+ * HomeButton.jsx  -  CGS
+ * Fixed bottom-left scroll-to-top-and-home button.
+ * Hidden on the home page itself (no point navigating home from home);
+ * shows automatically on every other page.
  */
 import React from 'react';
 import '../Styles/HomeButton.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function HomeButton() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  if (location.pathname === '/') {
+    return null;
+  }
 
   const handleClick = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });

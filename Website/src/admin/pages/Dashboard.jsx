@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import client from '../api/client';
 import { moduleList } from '../config/modules';
+import { useAuth } from '../context/AuthContext';
 
 export default function Dashboard() {
+  const { can } = useAuth();
   const [counts, setCounts] = useState({});
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
@@ -39,7 +41,7 @@ export default function Dashboard() {
       )}
 
       <div className="dash-grid">
-        {moduleList.map((m) => (
+        {moduleList.filter((m) => can(m.key, 'read')).map((m) => (
           <div className="dash-card" key={m.key}>
             <div className="dash-card-top">
               <div className="dash-icon" style={{ background: m.color }}>
@@ -59,7 +61,7 @@ export default function Dashboard() {
           </div>
         ))}
 
-        <div className="dash-card">
+        {can('settings', 'read') && <div className="dash-card">
           <div className="dash-card-top">
             <div className="dash-icon" style={{ background: '#6b7280' }}>
               <i className="bi bi-gear" />
@@ -71,6 +73,21 @@ export default function Dashboard() {
               <i className="bi bi-check-circle-fill" /> Active
             </span>
             <Link to="/admin/settings" className="dash-add-btn" title="Site Settings">
+              <i className="bi bi-arrow-right" />
+            </Link>
+          </div>
+        </div>}
+
+        <div className="dash-card">
+          <div className="dash-card-top">
+            <div className="dash-icon" style={{ background: '#0f766e' }}>
+              <i className="bi bi-clock-history" />
+            </div>
+          </div>
+          <h3>Activity Log</h3>
+          <div className="dash-status">
+            <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>User CRUD history</span>
+            <Link to="/admin/activity-log" className="dash-add-btn" title="View activity log">
               <i className="bi bi-arrow-right" />
             </Link>
           </div>

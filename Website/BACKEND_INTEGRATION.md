@@ -42,6 +42,38 @@ production website kabhi khaali/broken nahi dikhegi, backend ready hone tak.
    npm run build  # production
    ```
 
+## Required backend changes for the new admin features
+
+The React admin form now sends these fields. The API/database must enforce them; frontend validation alone cannot make an ID primary or unique.
+
+- `Faculty`: add `IsGuestFaculty` (`bit`, default `0`) and return it from `GET /api/faculty`.
+- `Gallery`: add required `Category` and `IsPrimary` (`bit`, default `0`). Enforce at most one active primary photo per category with a filtered unique index. `POST /api/gallery` must accept repeated `images` multipart fields and create one record per file transactionally. The first selected image is the cover if `isPrimary=true`.
+- `News`: add nullable `LinkUrl` (maximum 2048 characters) and return it from the news endpoint. It may be an internal path such as `/notices` or an HTTPS URL.
+- `Courses`: keep `ImagePath` for the JPG/PNG/WebP cover and add nullable `PdfPath`. Accept `image` and `pdf` multipart fields on course create/update; validate the image MIME type and allow only `application/pdf` for the PDF attachment.
+- `Settings / Hero Backgrounds`: `PUT /api/settings` must accept multipart field `heroBackground`, create a stored image record, and return `heroBackgroundPath` plus `heroBackgrounds`. Add `PATCH /api/settings/hero-backgrounds/{id}/toggle` to update `IsActive` and return the refreshed `heroBackgroundPath` and `heroBackgrounds` list. The public settings response must return only the selected active path in `heroBackgroundPath`.
+- Keep every module's database `Id` as an identity/sequence primary key. The admin UI pre-fills the next `displayOrder` for convenience, but the API must calculate IDs/orders safely under simultaneous uploads.
+
+## Activity log / audit trail
+
+The admin application includes an **Activity Log** page at `/admin/activity-log`.
+For logs to cover every user and every CRUD action, they must be written by the
+backend—not by browser code, which can be modified or bypassed.
+
+- Create an append-only `ActivityLogs` table with: `Id`, `CreatedAt` (UTC),
+  `UserId`, `UserName`, `Action` (`Create`, `Update`, `Delete`, `Login`,
+  `Logout`), `EntityType`, `EntityId`, `EntityName`/`Summary`, `IpAddress`,
+  and optional JSON `OldValues`/`NewValues`.
+- In each authenticated create/update/delete controller (including Settings),
+  write one record only after the transaction succeeds. Log login/logout in
+  the authentication service. Do not log passwords, tokens, or file bytes.
+- Prevent update/delete permissions on activity logs for normal administrators;
+  only a super-admin may read them. Retain records according to your institute's
+  policy.
+- Add authenticated `GET /api/activity-log` with newest-first results. It may
+  return either `data: []` or `data: { items: [] }`. Each item should expose
+  camel-case values such as `performedBy`, `action`, `entityType`, `entityId`,
+  `entityName`, `createdAt`, and `ipAddress`.
+
 ## Ab kya karna hai
 
 1. Backend (`CGS-CMS-Backend`) run karo.

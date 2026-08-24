@@ -1,266 +1,242 @@
-/* Google Font */
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+/* =========================================================
+   Staff.css - CGS Staff page
+   Used by: src/pages/Staff.jsx
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+   FIXED: previously had a global "* { margin:0; padding:0 }"
+   reset and a "body { font-family: Poppins; background:#f4f7fb }"
+   rule. Since plain CSS imports in CRA are NOT scoped to one
+   component, those rules silently overrode the whole site's
+   background/font as soon as anyone visited the Staff page.
+   Removed both; scoped everything to .faculty-section instead.
+
+   Colors rebranded from generic blue (#0d6efd) to the site's
+   green/gold palette to match the rest of the site.
+   ========================================================= */
+
+.faculty-section {
+  font-family: Inter, "Poppins", Arial, sans-serif;
+  padding: 60px 8%;
+  background: #fbfaf6;
 }
 
-body{
-    font-family:"Poppins",sans-serif;
-    background:#f4f7fb;
+.section-title {
+  text-align: center;
+  font-size: 34px;
+  font-weight: 800;
+  color: #153b22;
+  margin-bottom: 50px;
+  position: relative;
 }
 
-/*==========================
- SECTION
-==========================*/
-
-.faculty-section{
-    padding:80px 8%;
+.section-title::after {
+  content: "";
+  width: 56px;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #1b6a35, #c99a3e);
+  display: block;
+  margin: 14px auto 0;
 }
 
-.section-title{
-    text-align:center;
-    font-size:38px;
-    font-weight:700;
-    color:#000;
-    margin-bottom:60px;
-    position:relative;
+
+/* Grid */
+
+.faculty-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
 }
 
-.section-title::after{
-    content:"";
-    width:80px;
-    height:4px;
-    background:#0d6efd;
-    display:block;
-    margin:15px auto 0;
-    border-radius:20px;
+
+/* Card */
+
+.faculty-card {
+  background: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  transition: 0.35s ease;
+  box-shadow: 0 8px 24px rgba(20, 40, 25, 0.08);
 }
 
-/*==========================
- GRID
-==========================*/
-
-.faculty-wrapper{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
-    gap:35px;
+.faculty-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(20, 60, 35, 0.16);
 }
 
-/*==========================
- CARD
-==========================*/
+/* Animated shine on hover */
 
-.faculty-card{
-    background:#fff;
-    border-radius:18px;
-    overflow:hidden;
-    position:relative;
-    transition:.45s ease;
-    box-shadow:0 12px 35px rgba(0,0,0,.08);
+.faculty-card::before {
+  content: "";
+  position: absolute;
+  top: -150%;
+  left: -150%;
+  width: 250%;
+  height: 250%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transform: rotate(25deg);
+  transition: 1s;
 }
 
-.faculty-card:hover{
-    transform:translateY(-10px);
-    box-shadow:0 25px 55px rgba(13,71,161,.18);
+.faculty-card:hover::before {
+  left: 100%;
 }
 
-/* Animated Shine */
 
-.faculty-card::before{
-    content:"";
-    position:absolute;
-    top:-150%;
-    left:-150%;
-    width:250%;
-    height:250%;
-    background:linear-gradient(
-        120deg,
-        transparent,
-        rgba(255,255,255,.45),
-        transparent
-    );
-    transform:rotate(25deg);
-    transition:1s;
+/* Header (colored band + photo) */
+
+.card-header {
+  height: 140px;
+  background: linear-gradient(135deg, #145c31, #0a3d1e);
+  position: relative;
 }
 
-.faculty-card:hover::before{
-    left:100%;
+.card-header img {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 6px solid #fff;
+  position: absolute;
+  left: 50%;
+  bottom: -65px;
+  transform: translateX(-50%);
+  transition: 0.4s;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
 }
 
-/*==========================
- HEADER
-==========================*/
-
-.card-header{
-    height:150px;
-    background:linear-gradient(135deg,#1565c0,#0d47a1);
-    position:relative;
+.faculty-card:hover .card-header img {
+  transform: translateX(-50%) scale(1.06);
 }
 
-.card-header img{
-    width:140px;
-    height:140px;
-    border-radius:50%;
-    object-fit:cover;
-    border:6px solid #fff;
-    position:absolute;
-    left:50%;
-    bottom:-70px;
-    transform:translateX(-50%);
-    transition:.4s;
-    box-shadow:0 12px 30px rgba(0,0,0,.25);
+
+/* Body */
+
+.card-body {
+  padding: 82px 24px 28px;
 }
 
-.faculty-card:hover .card-header img{
-    transform:translateX(-50%) scale(1.08);
+.card-body h3 {
+  text-align: center;
+  color: #153b22;
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 8px;
 }
 
-/*==========================
- BODY
-==========================*/
 
-.card-body{
-    padding:90px 25px 30px;
+/* Designation */
+
+.designation {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  color: #1b6a35;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 22px;
 }
 
-.card-body h3{
-    text-align:center;
-    color:#000;
-    font-size:24px;
-    font-weight:700;
-    margin-bottom:10px;
+.title-icon {
+  color: #c99a3e;
 }
 
-/*==========================
- DESIGNATION
-==========================*/
 
-.designation{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:8px;
+/* Qualification / contact table */
 
-    color:#000;
-    font-size:15px;
-    font-weight:600;
-
-    margin-bottom:25px;
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.title-icon{
-    color:#0d6efd;
+.info-table tr {
+  transition: 0.25s;
 }
 
-/*==========================
- TABLE
-==========================*/
-
-.info-table{
-    width:100%;
-    border-collapse:collapse;
+.info-table tr:hover {
+  background: #f7faf5;
 }
 
-.info-table tr{
-    transition:.3s;
+.info-table td {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 13px 8px;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.6;
+  border-bottom: 1px solid #eef1ec;
 }
 
-.info-table tr:hover{
-    background:#f8fbff;
+.info-table tr:last-child td {
+  border-bottom: none;
 }
 
-.info-table td{
-    display:flex;
-    align-items:flex-start;
-    gap:12px;
 
-    padding:14px 10px;
-
-    color:#000;
-    font-size:15px;
-    font-weight:500;
-
-    line-height:1.6;
-
-    border-bottom:1px solid #ececec;
-}
-
-.info-table tr:last-child td{
-    border-bottom:none;
-}
-
-/*==========================
- ICONS
-==========================*/
+/* Icons */
 
 .icon,
-.info-table svg{
-    color:#0d6efd;
-    font-size:18px;
-    min-width:18px;
-    transition:.3s;
-    margin-top:2px;
+.info-table svg {
+  color: #1b6a35;
+  font-size: 17px;
+  min-width: 17px;
+  transition: 0.25s;
+  margin-top: 2px;
 }
 
 .info-table tr:hover .icon,
-.info-table tr:hover svg{
-    color:#ff9800;
-    transform:scale(1.15);
+.info-table tr:hover svg {
+  color: #c99a3e;
+  transform: scale(1.12);
 }
 
-/*==========================
- EMAIL
-==========================*/
 
-.info-table a{
-    color:#000;
-    text-decoration:none;
-    transition:.3s;
-    word-break:break-word;
+/* Email links */
+
+.info-table a {
+  color: #20362a;
+  text-decoration: none;
+  transition: 0.25s;
+  word-break: break-word;
 }
 
-.info-table a:hover{
-    color:#0d6efd;
-    text-decoration:underline;
+.info-table a:hover {
+  color: #1b6a35;
+  text-decoration: underline;
 }
 
-/*==========================
- RESPONSIVE
-==========================*/
 
-@media(max-width:768px){
+/* Responsive */
 
-    .faculty-section{
-        padding:60px 20px;
-    }
-
-    .section-title{
-        font-size:30px;
-    }
-
-    .faculty-wrapper{
-        grid-template-columns:1fr;
-    }
-
-    .card-header img{
-        width:120px;
-        height:120px;
-        bottom:-60px;
-    }
-
-    .card-body{
-        padding-top:80px;
-    }
-
-    .card-body h3{
-        font-size:22px;
-    }
-
-    .info-table td{
-        font-size:14px;
-    }
-
+@media (max-width: 768px) {
+  .faculty-section {
+    padding: 50px 20px;
+  }
+  .section-title {
+    font-size: 27px;
+  }
+  .faculty-wrapper {
+    grid-template-columns: 1fr;
+  }
+  .card-header img {
+    width: 115px;
+    height: 115px;
+    bottom: -58px;
+  }
+  .card-body {
+    padding-top: 74px;
+  }
+  .card-body h3 {
+    font-size: 20px;
+  }
+  .info-table td {
+    font-size: 13px;
+  }
 }

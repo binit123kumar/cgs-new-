@@ -1,96 +1,43 @@
 /**
- * AcademicProgram.jsx – CGS (NEW page)
+ * AcademicProgram.jsx - CGS
+ *
+ * Now loads the real Course record from the CMS (Admin -> Courses)
+ * using the numeric course id in the URL, instead of a hardcoded
+ * slug/content map. Edit programme details from Admin -> Courses.
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { getCourses, fileUrl } from '../api/cmsApi';
 import '../Styles/About.css';
 import '../Styles/Aim.css';
 
-// ── PDF डाउनलोड करने के लिए फंक्शन ──────────────────────────────────────────
-const handleDownload = async (url, title) => {
-  try {
-    const response = await fetch(url);
-    const blob = await response.blob();
-    const blobUrl = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = blobUrl;
-    link.setAttribute('download', `${title.replace(/\s+/g, '_')}.pdf`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(blobUrl);
-  } catch (error) {
-    console.error("Download failed:", error);
-    // अगर fetch फेल हो, तो सीधे लिंक खोलें (Fallback)
-    window.open(url, '_blank');
-  }
-};
-
-// ── Programme data map ─────────────────────────────────────────────────────
-const programs = {
-  'ma-msc-geography': {
-    title: 'M.A. in Geography',
-    pdfLink: '../assets/pdf/Ordinance - M.A. in Social Science.pdf',
-    content: (
-      <>
-        <p>The 2-year (Four Semester) Post Graduate Degree course M.A./M.Sc. in Geography and Environmental Studies under the <strong>Choice Based Credit System (CBCS)</strong>.</p>
-        <br />
-        <h3>Ordinance Reference</h3>
-        <p>The ordinance and regulations of M.A./M.Sc. are adopted from the common ordinance of Universities of Bihar from the Governor's Secretariat, Bihar, via Memo No. Estb. PREAMBLE: 40/2017-1457/GS(I), Dated 29-05-2018.</p>
-      </>
-    ),
-  },
-  'msc-gis-remote-sensing': {
-    title: 'M.Sc. in GIS & Remote Sensing',
-    pdfLink: '/assets/Ordinance_MSc_GIS.pdf',
-    content: (
-      <>
-        <h3>Nomenclature</h3>
-        <p>This ordinance may be called the "Ordinance for Admission to M.Sc. (Geographic Information System & Remote Sensing) programme..."</p>
-      </>
-    ),
-  },
-  'pg-diploma-gis': {
-    title: 'Post Graduate Diploma in GIS & Remote Sensing',
-    pdfLink: '/assets/Ordinance_PG_Diploma_GIS.pdf',
-    content: (
-      <>
-        <h3>Nomenclature</h3>
-        <p>This ordinance may be called the "Ordinance for Admission to Post Graduate Diploma (Geographic Information System & Remote Sensing) programme..."</p>
-      </>
-    ),
-  },
-  'certificate-gis': {
-    title: 'Certificate Programme in GIS & Remote Sensing',
-    pdfLink: '/assets/Ordinance_Certificate_GIS.pdf',
-    content: (
-      <>
-        <h3>Nomenclature</h3>
-        <p>This ordinance may be called the "Ordinance for Admission to Certificate (Geographic Information System & Remote Sensing) programme..."</p>
-      </>
-    ),
-  },
-  'phd-geography': {
-    title: 'Ph.D. in Geography',
-    pdfLink: '/assets/pdf/Ph.D. Coursework Syllabus.pdf',
-    content: (
-      <>
-        <h3>Centre for Geographical Studies – Ph.D. Programme</h3>
-        <p>Common Ordinance and Regulations for the award of Ph.D. degree...</p>
-      </>
-    ),
-  },
-};
-
-// ── Component ──────────────────────────────────────────────────────────────
 function AcademicProgram() {
   const { programId } = useParams();
-  const program = programs[programId];
+  const [course, setCourse] = useState(undefined); // undefined = loading, null = not found
 
-  if (!program) {
+  useEffect(() => {
+    getCourses()
+      .then((list) => {
+        const match = (list || []).find(
+          (c) => String(c.id) === String(programId)
+        );
+        setCourse(match || null);
+      })
+      .catch(() => setCourse(null));
+  }, [programId]);
+
+  if (course === undefined) {
     return (
-      <div className="About-par" style={{ textAlign: 'center' }}>
+      <div className="About-par" style={{ textAlign: 'center', padding: '40px' }}>
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  if (!course) {
+    return (
+      <div className="About-par" style={{ textAlign: 'center', padding: '40px' }}>
         <h2>Programme Not Found</h2>
         <p>The programme you are looking for does not exist. <Link to="/">Go Home</Link></p>
       </div>
@@ -99,29 +46,66 @@ function AcademicProgram() {
 
   return (
     <div className="AimdBox" style={{ padding: '30px' }}>
-      <h1 className="main-heading">{program.title}</h1>
+      <h1 className="main-heading">{course.name}</h1>
       <hr className="heading-underline" />
 
       <div className="AimContent">
-        {program.content}
+        {course.imagePath && (
+          <img
+            src={fileUrl(course.imagePath)}
+            alt={course.name}
+            style={{ width: '100%', maxHeight: 320, objectFit: 'cover', borderRadius: 8, marginBottom: 20 }}
+          />
+        )}
+
+        {course.duration && <p><strong>Duration:</strong> {course.duration}</p>}
+        {course.eligibility && <p><strong>Eligibility:</strong> {course.eligibility}</p>}
+
+        {course.description && (
+          <>
+            <br />
+            <h3>About this Programme</h3>
+            <p>{course.description}</p>
+          </>
+        )}
       </div>
 
       <div style={{ textAlign: 'center', marginTop: '30px' }}>
-        <button
-          onClick={() => handleDownload(program.pdfLink, program.title)}
+        {course.pdfPath ? (
+          <a
+            href={fileUrl(course.pdfPath)}
+            target="_blank"
+            rel="noreferrer"
           style={{
+            display: 'inline-block',
             padding: '12px 28px',
             backgroundColor: '#2e6b3e',
             color: 'white',
-            border: 'none',
             borderRadius: '6px',
             fontWeight: '600',
             fontSize: '1rem',
-            cursor: 'pointer',
+            textDecoration: 'none',
           }}
         >
-          📄 Download Ordinance (PDF)
-        </button>
+          View / Download Course PDF
+          </a>
+        ) : (
+          <Link
+            to="/downloads"
+            style={{
+              display: 'inline-block',
+              padding: '12px 28px',
+              backgroundColor: '#2e6b3e',
+              color: 'white',
+              borderRadius: '6px',
+              fontWeight: '600',
+              fontSize: '1rem',
+              textDecoration: 'none',
+            }}
+          >
+            View Ordinance / Syllabus (Downloads)
+          </Link>
+        )}
       </div>
     </div>
   );

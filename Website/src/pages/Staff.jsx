@@ -15,7 +15,7 @@ import {
   FaPhoneAlt,
 } from "react-icons/fa";
 
-import { getStaff, fileUrl } from "../api/cmsApi";
+import { getStaff, getGuestFaculty, fileUrl } from "../api/cmsApi";
 
 const facultyData = [
   {
@@ -108,7 +108,10 @@ function Staff() {
   const [cmsStaff, setCmsStaff] = useState(null); // null = loading
 
   useEffect(() => {
-    getStaff().then(setCmsStaff);
+    Promise.all([getStaff(), getGuestFaculty()]).then(([staff, guestFaculty]) => {
+      const byId = new Map([...guestFaculty, ...staff].map((member) => [member.id, member]));
+      setCmsStaff([...byId.values()]);
+    });
   }, []);
 
   // Backend "Staff" entries don't carry a qualifications list (that field
