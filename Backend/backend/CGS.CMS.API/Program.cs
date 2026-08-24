@@ -8,12 +8,12 @@ using CGS.CMS.API.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // --- Database (SQL Server via EF Core) ---
-var configuredConnectionString = builder.Configuration["DATABASE_URL"]
-    ?? builder.Configuration.GetConnectionString("DefaultConnection");
+var configuredConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? builder.Configuration["DATABASE_URL"];
 if (string.IsNullOrWhiteSpace(configuredConnectionString))
     throw new InvalidOperationException("Configure ConnectionStrings__DefaultConnection or DATABASE_URL.");
 
-var connectionString = ToNpgsqlConnectionString(configuredConnectionString);
+var connectionString = ToNpgsqlConnectionString(configuredConnectionString.Trim().Trim('"', '\''));
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
