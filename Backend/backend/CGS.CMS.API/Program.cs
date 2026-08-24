@@ -8,10 +8,12 @@ using CGS.CMS.API.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // --- Database (SQL Server via EF Core) ---
-var connectionString = builder.Configuration["DATABASE_URL"]
+var configuredConnectionString = builder.Configuration["DATABASE_URL"]
     ?? builder.Configuration.GetConnectionString("DefaultConnection");
-if (string.IsNullOrWhiteSpace(connectionString))
+if (string.IsNullOrWhiteSpace(configuredConnectionString))
     throw new InvalidOperationException("Configure ConnectionStrings__DefaultConnection or DATABASE_URL.");
+
+var connectionString = ToNpgsqlConnectionString(configuredConnectionString);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
@@ -87,6 +89,29 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+
+static string ToNpgsqlConnectionString(string value)
+{
+    if (!value.StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase) &&
+        !value.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase))
+        return value;
+
+    var uri = new Uri(value);
+    var userInfo = uri.UserInfo.Split(':', 2);
+    if (userInfo.Length != 2)
+        throw new InvalidOperationException("PostgreSQL URI must include username and password.");
+
+    var builder = new Npgsql.NpgsqlConnectionStringBuilder
+    {
+        Host = uri.Host,
+        Port = uri.Port > 0 ? uri.Port : 5432,
+        Database = uri.AbsolutePath.Trim('/'),
+        Username = Uri.UnescapeDataString(userInfo[0]),
+        Password = Uri.UnescapeDataString(userInfo[1]),
+        SslMode = Npgsql.SslMode.Require
+    };
+    return builder.ConnectionString;
+}
 
 // --- Create the initial schema in a fresh Supabase database ---
 using (var scope = app.Services.CreateScope())
