@@ -1,0 +1,19 @@
+{
+  "folders": [
+    {
+      "name": "1 - Backend (API)",
+      "path": "Backend/backend/CGS.CMS.API"
+    },
+    {
+      "name": "2 - Website (incl. Admin at /admin)",
+      "path": "Website"
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/bin": true,
+      "**/obj": true,
+      "**/node_modules": true
+    }
+  }
+}
