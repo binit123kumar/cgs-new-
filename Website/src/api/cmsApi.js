@@ -2,9 +2,7 @@
  * cmsApi.js
  *
  * Thin wrapper around the CGS CMS backend (ASP.NET Core Web API).
- * Every function fails soft: on any network/API error it resolves to an
- * empty array/null instead of throwing, so pages can safely fall back to
- * their existing static content when the backend isn't reachable yet.
+ * Provides consistent error handling, retries, and caching.
  */
 
 const API_URL = process.env.REACT_APP_API_URL || 'https://localhost:7050/api';
@@ -19,14 +17,76 @@ export function fileUrl(relativePath) {
   return `${API_BASE}${relativePath}`;
 }
 
-async function getJson(path) {
+// Simple in-memory cache for GET requests
+const cache = new Map();
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+async function fetchWithRetry(url, options = {}, retries = 2, delay = 500) {
+  for (let i = 0; i <= retries; i++) {
+    try {
+      const res = await fetch(url, {
+        ...options,
+        headers: {
+          'Content-Type': 'application/json',
+          ...options.headers,
+        },
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.message || `HTTP ${res.status}: ${res.statusText}`);
+      }
+
+      const json = await res.json();
+      return json.data ?? null;
+    } catch (error) {
+      if (i === retries) throw error;
+      await new Promise(r => setTimeout(r, delay * (i + 1)));
+    }
+  }
+}
+
+function getCacheKey(path) {
+  return `GET:${path}`;
+}
+
+function getFromCache(key) {
+  const entry = cache.get(key);
+  if (!entry) return null;
+  if (Date.now() - entry.timestamp > CACHE_TTL) {
+    cache.delete(key);
+    return null;
+  }
+  return entry.data;
+}
+
+function setCache(key, data) {
+  cache.set(key, { data, timestamp: Date.now() });
+}
+
+function invalidateCache(path) {
+  const key = getCacheKey(path);
+  cache.delete(key);
+}
+
+async function getJson(path, options = {}) {
+  const { useCache = true, ...fetchOptions } = options;
+  const cacheKey = getCacheKey(path);
+
+  if (useCache && fetchOptions.method !== 'POST') {
+    const cached = getFromCache(cacheKey);
+    if (cached) return cached;
+  }
+
   try {
-    const res = await fetch(`${API_URL}${path}`);
-    if (!res.ok) return null;
-    const json = await res.json();
-    return json.data ?? null;
-  } catch {
-    return null; // backend unreachable — caller should fall back to static content
+    const data = await fetchWithRetry(`${API_URL}${path}`, fetchOptions);
+    if (useCache && fetchOptions.method !== 'POST') {
+      setCache(cacheKey, data);
+    }
+    return data;
+  } catch (error) {
+    console.error(`API Error [${path}]:`, error.message);
+    throw error; // Let caller handle fallback
   }
 }
 
@@ -106,5 +166,67 @@ export async function getPublications() {
 }
 
 export async function getSettings() {
-  return getJson('/settings');
+  const data = await getJson('/settings', { useCache: false });
+  return data;
 }
+
+export async function getAimObjectives() {
+  const data = await getJson('/aimobjective');
+  return activeSorted(data);
+}
+
+export async function getNavigation() {
+  const data = await getJson('/navigation');
+  return activeSorted(data);
+}
+
+export async function getFooterLinks() {
+  const data = await getJson('/footerlinks');
+  return activeSorted(data);
+}
+
+export async function getFacilities() {
+  const data = await getJson('/facilities');
+  return activeSorted(data);
+}
+
+// Admin API functions (require authentication)
+export async function adminGetAll(endpoint) {
+  return getJson(endpoint, { useCache: false });
+}
+
+export async function adminCreate(endpoint, formData) {
+  invalidateCache(endpoint);
+  return fetchWithRetry(`${API_URL}${endpoint}`, {
+    method: 'POST',
+    body: formData,
+  });
+}
+
+export async function adminUpdate(endpoint, formData) {
+  invalidateCache(endpoint);
+  return fetchWithRetry(`${API_URL}${endpoint}`, {
+    method: 'PUT',
+    body: formData,
+  });
+}
+
+export async function adminDelete(endpoint) {
+  invalidateCache(endpoint);
+  return fetchWithRetry(`${API_URL}${endpoint}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function adminToggleStatus(endpoint) {
+  invalidateCache(endpoint);
+  return fetchWithRetry(`${API_URL}${endpoint}`, {
+    method: 'PATCH',
+  });
+}
+
+// Export cache utilities for advanced use
+export const apiCache = {
+  clear: () => cache.clear(),
+  invalidate: invalidateCache,
+};

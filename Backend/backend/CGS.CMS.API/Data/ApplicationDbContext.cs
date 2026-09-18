@@ -19,8 +19,15 @@ namespace CGS.CMS.API.Data
         public DbSet<DownloadItem> DownloadItems => Set<DownloadItem>();
         public DbSet<Publication> Publications => Set<Publication>();
         public DbSet<AimObjectiveItem> AimObjectiveItems => Set<AimObjectiveItem>();
+        public DbSet<NavigationItem> NavigationItems => Set<NavigationItem>();
+        public DbSet<FooterLink> FooterLinks => Set<FooterLink>();
+        public DbSet<Facility> Facilities => Set<Facility>();
         public DbSet<SiteSetting> SiteSettings => Set<SiteSetting>();
         public DbSet<AdminUser> AdminUsers => Set<AdminUser>();
+
+        public DbSet<ReportEntry> ReportEntries => Set<ReportEntry>();
+
+        public DbSet<ReportConfig> ReportConfigs => Set<ReportConfig>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,7 +44,7 @@ namespace CGS.CMS.API.Data
                 Email = "admin@cgs.edu",
                 Role = "Super Admin",
                 PermissionsJson = "{}",
-                CreatedAt = new DateTime(2026, 1, 1)
+                CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0,DateTimeKind.Utc)
             });
 
             modelBuilder.Entity<SiteSetting>().HasData(new SiteSetting
@@ -50,13 +57,63 @@ namespace CGS.CMS.API.Data
                 MetaTitle = "CGS - School of Geography"
             });
 
+            modelBuilder.Entity<ReportConfig>().HasData(new ReportConfig
+            {
+                Id = 1,
+                IsActive = true,
+                ReportHour = 11,
+                ReportMinute = 0,
+                ReportFormat = "Word",
+                IncludeGitLog = true,
+                IncludeDbChanges = true,
+                RetentionDays = 30,
+                ReportStoragePath = "wwwroot/reports",
+                CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)
+            });
+
+            modelBuilder.Entity<ReportEntry>().HasIndex(x => x.IsActive);
+            modelBuilder.Entity<ReportEntry>().HasIndex(x => x.PerformedAt);
+            modelBuilder.Entity<ReportEntry>().HasIndex(x => x.Category);
+
+            modelBuilder.Entity<ReportConfig>().HasIndex(x => x.Id).IsUnique();
+
             // Unique username
             modelBuilder.Entity<AdminUser>().HasIndex(u => u.Username).IsUnique();
+
+            // Indexes for frequently queried columns
+            modelBuilder.Entity<About>().HasIndex(x => new { x.IsActive, x.DisplayOrder });
+            modelBuilder.Entity<Faculty>().HasIndex(x => new { x.IsActive, x.DisplayOrder });
+            modelBuilder.Entity<Faculty>().HasIndex(x => x.IsGuestFaculty);
+            modelBuilder.Entity<Staff>().HasIndex(x => new { x.IsActive, x.DisplayOrder });
+            modelBuilder.Entity<GalleryItem>().HasIndex(x => new { x.IsActive, x.DisplayOrder });
+            modelBuilder.Entity<GalleryItem>().HasIndex(x => x.Category);
+            modelBuilder.Entity<NewsItem>().HasIndex(x => new { x.IsActive, x.DisplayOrder });
+            modelBuilder.Entity<NewsItem>().HasIndex(x => x.PublishDate);
+            modelBuilder.Entity<EventItem>().HasIndex(x => new { x.IsActive, x.DisplayOrder });
+            modelBuilder.Entity<EventItem>().HasIndex(x => x.EventDate);
+            modelBuilder.Entity<NoticeItem>().HasIndex(x => new { x.IsActive, x.DisplayOrder });
+            modelBuilder.Entity<NoticeItem>().HasIndex(x => x.NoticeDate);
+            modelBuilder.Entity<SliderItem>().HasIndex(x => new { x.IsActive, x.DisplayOrder });
+            modelBuilder.Entity<Course>().HasIndex(x => new { x.IsActive, x.DisplayOrder });
+            modelBuilder.Entity<DownloadItem>().HasIndex(x => new { x.IsActive, x.DisplayOrder });
+            modelBuilder.Entity<DownloadItem>().HasIndex(x => x.Category);
+            modelBuilder.Entity<Publication>().HasIndex(x => new { x.IsActive, x.DisplayOrder });
+            modelBuilder.Entity<Publication>().HasIndex(x => x.PublishYear);
+            modelBuilder.Entity<AimObjectiveItem>().HasIndex(x => new { x.IsActive, x.DisplayOrder });
+            modelBuilder.Entity<AimObjectiveItem>().HasIndex(x => x.SectionLabel);
+            modelBuilder.Entity<NavigationItem>().HasIndex(x => new { x.IsActive, x.DisplayOrder });
+            modelBuilder.Entity<NavigationItem>().HasIndex(x => x.ParentId);
+            modelBuilder.Entity<FooterLink>().HasIndex(x => new { x.IsActive, x.DisplayOrder });
+            modelBuilder.Entity<FooterLink>().HasIndex(x => x.Section);
+            modelBuilder.Entity<Facility>().HasIndex(x => new { x.IsActive, x.DisplayOrder });
+
+            // Ensure SiteSettings only has one row
+            modelBuilder.Entity<SiteSetting>().HasIndex(x => x.Id).IsUnique();
 
             // Seed the existing "Aim and Objective" page content so it's
             // already editable from Admin -> Aim & Objective after migration,
             // instead of starting empty.
-            var seedDate = new DateTime(2026, 1, 1);
+            var seedDate = new DateTime(2026, 1, 1, 0, 0, 0, 0,DateTimeKind.Utc);
             modelBuilder.Entity<AimObjectiveItem>().HasData(
                 new AimObjectiveItem { Id = 1, SectionLabel = "Aim", IconKey = "bullseye", DisplayOrder = 1, CreatedAt = seedDate, Body = "To make the Centre for Geographical Studies a premier institution devoted to excellence in teaching, research, and outreach in Geographical Studies, GIS, Remote Sensing, and related disciplines — with a special focus on the developmental challenges of Bihar and the Gangetic Plain." },
                 new AimObjectiveItem { Id = 2, SectionLabel = "Objectives", IconKey = "binoculars", DisplayOrder = 2, CreatedAt = seedDate, Body = "The Centre aims to produce cutting-edge planning solutions for the myriad obstacles that Bihar has to overcome in its developmental journey. Key objectives include advancing knowledge through research in spatial sciences, building capacity in GIS and Remote Sensing, and providing quality postgraduate education in geography." },

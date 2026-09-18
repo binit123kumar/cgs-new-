@@ -1,34 +1,67 @@
-/**
- * Faculty.jsx  –  CGS (Centre for Geographical Studies)
- *
- * STRUCTURE: Identical to akuastrono Faculty.jsx
- *   Each person rendered in a .Faculty-box card with image,
- *   name, designation, email, and contact number.
- *
- * DATA CHANGED: CGS faculty & staff from cgs-main/founder.html
- *   and known CGS personnel records.
- */
-
 import React, { useEffect, useState } from 'react';
 import '../Styles/Faculty.css';
 import { getFaculty, fileUrl } from '../api/cmsApi';
-
-// ── Faculty images (hosted on shared CDN / public folder) ──
-// Replace these paths with your actual image locations.
-const facultyImg  = 'https://akucgs.vercel.app/images/faculty.jpg';
+import { LoadingSpinner, ErrorState, EmptyState } from '../components/DataState';
 
 function Faculty() {
   const [cmsFaculty, setCmsFaculty] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchFaculty = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getFaculty();
+      setCmsFaculty(data || []);
+    } catch (err) {
+      setError(err.message || 'Failed to load faculty');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    getFaculty().then(setCmsFaculty);
+    fetchFaculty();
   }, []);
+
+  const faculty = cmsFaculty.filter((f) => !f.isGuestFaculty && !f.isDirector);
+  const director = cmsFaculty.find((f) => f.isDirector);
+
+  if (loading) {
+    return (
+      <>
+        <LoadingSpinner size="lg" message="Loading faculty..." />
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <ErrorState message={error} onRetry={fetchFaculty} />
+      </>
+    );
+  }
 
   return (
     <>
+      {/* ── Director (if any) ── */}
+      {director && (
+        <div className="Faculty-box director-card">
+          <h1>Director</h1>
+          {director.photoPath && <img src={fileUrl(director.photoPath)} alt={director.name} />}
+          <h3>{director.name}</h3>
+          {director.designation && <h3>{director.designation}</h3>}
+          {director.qualification && <h3>{director.qualification}</h3>}
+          {director.email && <h3>Email – {director.email}</h3>}
+          {director.phone && <h3>Contact No. – {director.phone}</h3>}
+        </div>
+      )}
+
       {/* ── Faculty ── */}
-      {cmsFaculty.filter((f) => !f.isGuestFaculty && !f.isDirector).length > 0 ? (
-        cmsFaculty.filter((f) => !f.isGuestFaculty && !f.isDirector).map((f) => (
+      {faculty.length > 0 ? (
+        faculty.map((f) => (
           <div className="Faculty-box" key={f.id}>
             <h1>{f.designation || 'Faculty'}</h1>
             {f.photoPath && <img src={fileUrl(f.photoPath)} alt={f.name} />}
@@ -41,25 +74,14 @@ function Faculty() {
       ) : (
         <div className="Faculty-box">
           <h1>Faculty</h1>
-          <img src={facultyImg} alt="Faculty – CGS" />
-          <h3>Faculty positions are being filled as per Bihar Government recruitment norms.</h3>
-          <h3>
-            For faculty-related enquiries, please contact:{' '}
-            <a href="mailto:support@cgspatna.ac.in">support@cgspatna.ac.in</a>
-          </h3>
+          <EmptyState message="No faculty members added yet." />
         </div>
       )}
 
       {/* ── Administrative Staff ── */}
       <div className="Faculty-box">
         <h1>Administrative Staff</h1>
-        <h3>Office – Centre for Geographical Studies</h3>
-        <h3>
-          Ground Floor, Centres of Excellence Building,
-          AKU Campus, Mithapur, Patna-800001
-        </h3>
-        <h3>Phone – 0612-2952752</h3>
-        <h3>Email – support@cgspatna.ac.in</h3>
+        <EmptyState message="Administrative staff information is managed separately." />
       </div>
     </>
   );

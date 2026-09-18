@@ -6,62 +6,83 @@
  * entry with Title exactly "Director's Message":
  *   - Description = the director's message text (shown below the box)
  *   - ImagePath    = director's photo
- * Falls back to the previous static content if no such entry exists yet.
+ * Shows empty state if no such entry exists yet.
  */
 
 import React, { useEffect, useState } from 'react';
 import { getAbout, getFaculty, fileUrl } from '../api/cmsApi';
+import { LoadingSpinner, ErrorState, EmptyState } from '../components/DataState';
 import '../Styles/Faculty.css';
 import '../Styles/About.css';
 
-const FALLBACK = {
-  name: "Dr. Poornima Sekhar Singh",
-  designation: "Founding Director",
-  org: "Centre for Geographical Studies, AKU, Patna",
-  email: "director@cgspatna.ac.in",
-  phone: "9471007084",
-  office: "Office: Ground Floor, Centres of Excellence Building, AKU Campus, Mithapur, Patna-800001",
-  image: "https://akucgs.vercel.app/images/director_img_150.png",
-  message: `The Centre for Geographical Studies, Govt. of Bihar, is one of a kind centre exclusively devoted to the discipline of geography in its full applied potential. This centre is a product of the vision of our Hon'ble Chief Minister Shri. Nitish Kumar, who wants this centre to produce cutting-edge planning solutions for the myriad of obstacles that Bihar has to overcome in its developmental journey.
-
-As the founding director of the institute, it is my honour as well as my promise to not only fulfil the vision of our dynamic Chief Minister but also to create this centre as the centre of excellence of research and knowledge production. With the patronage of all, I hope to make this centre a numero uno in the disciplinary field of Geographical research, especially incorporating the very latest in Satellite imagery, GIS, and Remote Sensing.`,
-};
-
 function DirectorMessage() {
   const [entry, setEntry] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const [list, faculty] = await Promise.all([getAbout(), getFaculty()]);
+      const match = (list || []).find(
+        (a) => a.isDirectorMessage || (a.title || a.Title || '').trim().toLowerCase() === "director's message"
+      );
+      const director = (faculty || []).find((member) => member.isDirector === true || member.isDirector === 'true');
+      setEntry({ ...(match || {}), ...(director || {}) });
+    } catch (err) {
+      setError(err.message || 'Failed to load director message');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    Promise.all([getAbout(), getFaculty()])
-      .then(([list, faculty]) => {
-        const match = (list || []).find(
-          (a) => a.isDirectorMessage || (a.title || a.Title || '').trim().toLowerCase() === "director's message"
-        );
-        const director = (faculty || []).find((member) => member.isDirector === true || member.isDirector === 'true');
-        setEntry({ ...(match || {}), ...(director || {}) });
-      })
-      .catch(() => setEntry({}));
+    fetchData();
   }, []);
+
+  if (loading) {
+    return (
+      <div style={{ padding: '20px', textAlign: 'center' }}>
+        <LoadingSpinner size="md" message="Loading director's message..." />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ padding: '20px', textAlign: 'center' }}>
+        <ErrorState message={error} onRetry={fetchData} />
+      </div>
+    );
+  }
 
   const imageSrc = (entry?.photoPath || entry?.imagePath)
     ? fileUrl(entry.photoPath || entry.imagePath)
-    : FALLBACK.image;
+    : null;
 
-  const messageParagraphs = (entry?.bio || entry?.description || FALLBACK.message)
+  const messageParagraphs = (entry?.bio || entry?.description || '')
     .split('\n')
     .map((s) => s.trim())
     .filter(Boolean);
+
+  if (!entry || (!entry.name && !entry.description)) {
+    return (
+      <div style={{ padding: '20px' }}>
+        <EmptyState message="Director's message not configured yet." action={{ label: 'Retry', onClick: fetchData }} />
+      </div>
+    );
+  }
 
   return (
     <div style={{ padding: '20px' }}>
       <div className="Faculty-box">
         <h1>Director's Message</h1>
-        <img src={imageSrc} alt="Director, CGS" />
-        <h3>{entry?.name || FALLBACK.name}</h3>
-        <h3>{entry?.designation || FALLBACK.designation}</h3>
-        <h3>{FALLBACK.org}</h3>
-        <h3>Email - {entry?.email || FALLBACK.email}</h3>
-        <h3>Phone - {entry?.phone || FALLBACK.phone}</h3>
-        <h3>{FALLBACK.office}</h3>
+        {imageSrc && <img src={imageSrc} alt="Director, CGS" />}
+        {entry?.name && <h3>{entry.name}</h3>}
+        {entry?.designation && <h3>{entry.designation}</h3>}
+        {entry?.email && <h3>Email - {entry.email}</h3>}
+        {entry?.phone && <h3>Phone - {entry.phone}</h3>}
       </div>
 
       <div className="About-par">

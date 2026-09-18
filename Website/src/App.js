@@ -23,6 +23,7 @@ import Downloads from "./pages/Downloads";
 import Gallery from "./pages/Gallery";
 import Publications from "./pages/Publications";
 import Infrastructure from "./pages/Infrastructure";
+import News from "./pages/News";
 
 // Admin panel (fully self-contained, own header/sidebar — no public
 // site chrome around it)
@@ -53,6 +54,7 @@ function PublicSite() {
           <Route path="/downloads" element={<Downloads />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/publications" element={<Publications />} />
+          <Route path="/news" element={<News />} />
         </Routes>
       </div>
 

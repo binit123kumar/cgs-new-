@@ -1,17 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { getGallery, fileUrl } from "../api/cmsApi";
+import { ErrorState, EmptyState, SkeletonGrid } from "../components/DataState";
 import "../Styles/ListPage.css";
 
 export default function Gallery() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [active, setActive] = useState(null); // lightbox
 
-  useEffect(() => {
-    getGallery().then((data) => {
-      setItems(data);
+  const fetchGallery = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getGallery();
+      setItems(data || []);
+    } catch (err) {
+      setError(err.message || 'Failed to load gallery');
+    } finally {
       setLoading(false);
-    });
+    }
+  };
+
+  useEffect(() => {
+    fetchGallery();
   }, []);
 
   const valueOf = (item, lowerName, upperName) => item?.[lowerName] ?? item?.[upperName];
@@ -23,32 +35,50 @@ export default function Gallery() {
     return groups;
   }, {});
 
+  if (loading) {
+    return (
+      <div className="list-page">
+        <h1>Photo Gallery</h1>
+        <SkeletonGrid count={6} />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="list-page">
+        <h1>Photo Gallery</h1>
+        <ErrorState message={error} onRetry={fetchGallery} />
+      </div>
+    );
+  }
+
+  if (items.length === 0) {
+    return (
+      <div className="list-page">
+        <h1>Photo Gallery</h1>
+        <EmptyState message="No photos uploaded yet." icon="🖼️" />
+      </div>
+    );
+  }
+
   return (
     <div className="list-page">
       <h1>Photo Gallery</h1>
-
-      {loading && <p>Loading…</p>}
-
-      {!loading && items.length === 0 && (
-        <p>No photos uploaded yet.</p>
-      )}
-
-      {!loading && items.length > 0 && (
-        <div className="gallery-category-list">
-          {Object.entries(categories).map(([category, photos]) => {
-            const coverIndex = photos.findIndex((photo) => valueOf(photo, 'isPrimary', 'IsPrimary') === true || valueOf(photo, 'isPrimary', 'IsPrimary') === 'true');
-            const cover = photos[coverIndex >= 0 ? coverIndex : 0];
-            return (
-              <section className="gallery-category" key={category}>
-                <button className="gallery-category-cover" type="button" onClick={() => setActive({ photos, index: coverIndex >= 0 ? coverIndex : 0, category })}>
-                  <img src={fileUrl(valueOf(cover, 'imagePath', 'ImagePath'))} alt={category} />
-                  <span><strong>{category}</strong><small>{photos.length} photo{photos.length === 1 ? '' : 's'}</small></span>
-                </button>
-              </section>
-            );
-          })}
-        </div>
-      )}
+      <div className="gallery-category-list">
+        {Object.entries(categories).map(([category, photos]) => {
+          const coverIndex = photos.findIndex((photo) => valueOf(photo, 'isPrimary', 'IsPrimary') === true || valueOf(photo, 'isPrimary', 'IsPrimary') === 'true');
+          const cover = photos[coverIndex >= 0 ? coverIndex : 0];
+          return (
+            <section className="gallery-category" key={category}>
+              <button className="gallery-category-cover" type="button" onClick={() => setActive({ photos, index: coverIndex >= 0 ? coverIndex : 0, category })}>
+                <img src={fileUrl(valueOf(cover, 'imagePath', 'ImagePath'))} alt={category} />
+                <span><strong>{category}</strong><small>{photos.length} photo{photos.length === 1 ? '' : 's'}</small></span>
+              </button>
+            </section>
+          );
+        })}
+      </div>
 
       {active && (
         <div className="gallery-lightbox" onClick={() => setActive(null)}>

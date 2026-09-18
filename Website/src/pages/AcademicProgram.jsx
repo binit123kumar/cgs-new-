@@ -1,36 +1,50 @@
-/**
- * AcademicProgram.jsx - CGS
- *
- * Now loads the real Course record from the CMS (Admin -> Courses)
- * using the numeric course id in the URL, instead of a hardcoded
- * slug/content map. Edit programme details from Admin -> Courses.
- */
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getCourses, fileUrl } from '../api/cmsApi';
+import { LoadingSpinner, ErrorState, EmptyState } from '../components/DataState';
 import '../Styles/About.css';
 import '../Styles/Aim.css';
 
 function AcademicProgram() {
   const { programId } = useParams();
-  const [course, setCourse] = useState(undefined); // undefined = loading, null = not found
+  const [course, setCourse] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    getCourses()
-      .then((list) => {
-        const match = (list || []).find(
-          (c) => String(c.id) === String(programId)
-        );
-        setCourse(match || null);
-      })
-      .catch(() => setCourse(null));
+  const fetchCourse = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const list = await getCourses();
+      const match = (list || []).find((c) => String(c.id) === String(programId));
+      if (match) {
+        setCourse(match);
+      } else {
+        setCourse(null);
+      }
+    } catch (err) {
+      setError(err.message || 'Failed to load programme');
+    } finally {
+      setLoading(false);
+    }
   }, [programId]);
 
-  if (course === undefined) {
+  useEffect(() => {
+    fetchCourse();
+  }, [fetchCourse]);
+
+  if (loading) {
     return (
       <div className="About-par" style={{ textAlign: 'center', padding: '40px' }}>
-        <p>Loading...</p>
+        <LoadingSpinner size="md" message="Loading programme details..." />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="About-par" style={{ textAlign: 'center', padding: '40px' }}>
+        <ErrorState message={error} onRetry={fetchCourse} />
       </div>
     );
   }
@@ -38,8 +52,10 @@ function AcademicProgram() {
   if (!course) {
     return (
       <div className="About-par" style={{ textAlign: 'center', padding: '40px' }}>
-        <h2>Programme Not Found</h2>
-        <p>The programme you are looking for does not exist. <Link to="/">Go Home</Link></p>
+        <EmptyState
+          message="Programme Not Found"
+          action={{ label: 'Go Home', onClick: () => window.location.href = '/' }}
+        />
       </div>
     );
   }
@@ -76,18 +92,18 @@ function AcademicProgram() {
             href={fileUrl(course.pdfPath)}
             target="_blank"
             rel="noreferrer"
-          style={{
-            display: 'inline-block',
-            padding: '12px 28px',
-            backgroundColor: '#2e6b3e',
-            color: 'white',
-            borderRadius: '6px',
-            fontWeight: '600',
-            fontSize: '1rem',
-            textDecoration: 'none',
-          }}
-        >
-          View / Download Course PDF
+            style={{
+              display: 'inline-block',
+              padding: '12px 28px',
+              backgroundColor: '#2e6b3e',
+              color: 'white',
+              borderRadius: '6px',
+              fontWeight: '600',
+              fontSize: '1rem',
+              textDecoration: 'none',
+            }}
+          >
+            View / Download Course PDF
           </a>
         ) : (
           <Link

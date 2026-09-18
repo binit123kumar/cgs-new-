@@ -1,5 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace CGS.CMS.API.Models
 {
@@ -34,6 +36,7 @@ namespace CGS.CMS.API.Models
         [Required]
         public string Description { get; set; } = string.Empty;
 
+        [MaxLength(500)]
         public string? ImagePath { get; set; }
 
         public bool ShowOnHomePage { get; set; }
@@ -61,14 +64,15 @@ namespace CGS.CMS.API.Models
         [MaxLength(250)]
         public string? Qualification { get; set; }
 
-        [MaxLength(150)]
+        [MaxLength(150), EmailAddress]
         public string? Email { get; set; }
 
-        [MaxLength(20)]
+        [MaxLength(20), Phone]
         public string? Phone { get; set; }
 
         public string? Bio { get; set; }
 
+        [MaxLength(500)]
         public string? PhotoPath { get; set; }
 
         public bool IsGuestFaculty { get; set; }
@@ -89,12 +93,13 @@ namespace CGS.CMS.API.Models
         [MaxLength(150)]
         public string? Designation { get; set; }
 
-        [MaxLength(150)]
+        [MaxLength(150), EmailAddress]
         public string? Email { get; set; }
 
-        [MaxLength(20)]
+        [MaxLength(20), Phone]
         public string? Phone { get; set; }
 
+        [MaxLength(500)]
         public string? PhotoPath { get; set; }
     }
 
@@ -108,7 +113,7 @@ namespace CGS.CMS.API.Models
         [Required, MaxLength(200)]
         public string Title { get; set; } = string.Empty;
 
-        [Required]
+        [Required, MaxLength(500)]
         public string ImagePath { get; set; } = string.Empty;
 
         [MaxLength(100)]
@@ -129,9 +134,10 @@ namespace CGS.CMS.API.Models
 
         public string? Description { get; set; }
 
+        [MaxLength(500)]
         public string? ImagePath { get; set; }
 
-        [MaxLength(300)]
+        [MaxLength(300), Url]
         public string? LinkUrl { get; set; }
 
         public DateTime PublishDate { get; set; } = DateTime.UtcNow;
@@ -154,6 +160,7 @@ namespace CGS.CMS.API.Models
         [MaxLength(200)]
         public string? Venue { get; set; }
 
+        [MaxLength(500)]
         public string? ImagePath { get; set; }
     }
 
@@ -169,6 +176,7 @@ namespace CGS.CMS.API.Models
 
         public string? Description { get; set; }
 
+        [MaxLength(500)]
         public string? FilePath { get; set; }
 
         public DateTime NoticeDate { get; set; } = DateTime.UtcNow;
@@ -184,10 +192,10 @@ namespace CGS.CMS.API.Models
         [MaxLength(200)]
         public string? Title { get; set; }
 
-        [Required]
+        [Required, MaxLength(500)]
         public string ImagePath { get; set; } = string.Empty;
 
-        [MaxLength(300)]
+        [MaxLength(300), Url]
         public string? LinkUrl { get; set; }
     }
 
@@ -209,8 +217,10 @@ namespace CGS.CMS.API.Models
         [MaxLength(250)]
         public string? Eligibility { get; set; }
 
+        [MaxLength(500)]
         public string? ImagePath { get; set; }
 
+        [MaxLength(500)]
         public string? PdfPath { get; set; }
     }
 
@@ -224,7 +234,7 @@ namespace CGS.CMS.API.Models
         [Required, MaxLength(200)]
         public string Title { get; set; } = string.Empty;
 
-        [Required]
+        [Required, MaxLength(500)]
         public string FilePath { get; set; } = string.Empty;
 
         [MaxLength(100)]
@@ -246,20 +256,16 @@ namespace CGS.CMS.API.Models
 
         public string? Description { get; set; }
 
+        [MaxLength(500)]
         public string? FilePath { get; set; }
 
+        [Range(1900, 2100)]
         public int? PublishYear { get; set; }
     }
 
 
     // =========================================================
     // AIM & OBJECTIVE
-    // A flexible ordered list so the whole "Aim and Objective" page
-    // is editable from Admin instead of being hardcoded in the
-    // frontend. SectionLabel groups items ("Aim", "Objectives",
-    // "Vision", "Mission"); Heading is only used for Mission's
-    // sub-items (e.g. "Teaching and Training") and left blank for
-    // the single-paragraph sections.
     // =========================================================
 
     public class AimObjectiveItem : BaseEntity
@@ -292,23 +298,23 @@ namespace CGS.CMS.API.Models
         // WEBSITE NAME
         // -----------------------------------------------------
 
-        [MaxLength(150)]
+        [Required, MaxLength(150)]
         public string SiteName { get; set; } = "CGS";
 
 
         // -----------------------------------------------------
         // SCHOOL OF GEOGRAPHY LOGO
-        // Existing Logo
         // -----------------------------------------------------
 
+        [MaxLength(500)]
         public string? LogoPath { get; set; }
 
 
         // -----------------------------------------------------
         // AKU / UNIVERSITY LOGO
-        // New property
         // -----------------------------------------------------
 
+        [MaxLength(500)]
         public string? UniversityLogoPath { get; set; }
 
 
@@ -319,10 +325,10 @@ namespace CGS.CMS.API.Models
         [MaxLength(300)]
         public string? Address { get; set; }
 
-        [MaxLength(20)]
+        [MaxLength(20), Phone]
         public string? Phone { get; set; }
 
-        [MaxLength(150)]
+        [MaxLength(150), EmailAddress]
         public string? Email { get; set; }
 
 
@@ -330,12 +336,16 @@ namespace CGS.CMS.API.Models
         // SOCIAL MEDIA
         // -----------------------------------------------------
 
+        [MaxLength(500), Url]
         public string? Facebook { get; set; }
 
+        [MaxLength(500), Url]
         public string? Twitter { get; set; }
 
+        [MaxLength(500), Url]
         public string? Instagram { get; set; }
 
+        [MaxLength(500), Url]
         public string? YouTube { get; set; }
 
 
@@ -350,10 +360,84 @@ namespace CGS.CMS.API.Models
 
 
         // -----------------------------------------------------
+        // HERO BACKGROUND
+        // -----------------------------------------------------
+
+        [MaxLength(500)]
+        public string? HeroBackgroundPath { get; set; }
+
+
+        // -----------------------------------------------------
         // UPDATED DATE
         // -----------------------------------------------------
 
         public DateTime? UpdatedAt { get; set; }
+    }
+
+
+    // =========================================================
+    // NAVIGATION MENU
+    // =========================================================
+
+    public class NavigationItem : BaseEntity
+    {
+        [Required, MaxLength(100)]
+        public string Label { get; set; } = string.Empty;
+
+        [MaxLength(300), Url]
+        public string? Url { get; set; }
+
+        public int? ParentId { get; set; }
+
+        [MaxLength(50)]
+        public string? IconKey { get; set; }
+
+        public bool IsExternal { get; set; }
+
+        public bool OpenInNewTab { get; set; }
+
+        [NotMapped]
+        public List<NavigationItem> Children { get; set; } = new();
+    }
+
+
+    // =========================================================
+    // FOOTER LINKS
+    // =========================================================
+
+    public class FooterLink : BaseEntity
+    {
+        [Required, MaxLength(100)]
+        public string Label { get; set; } = string.Empty;
+
+        [MaxLength(300), Url]
+        public string? Url { get; set; }
+
+        [MaxLength(50)]
+        public string Section { get; set; } = string.Empty;
+
+        public bool IsExternal { get; set; }
+
+        public bool OpenInNewTab { get; set; }
+    }
+
+
+    // =========================================================
+    // INFRASTRUCTURE / FACILITIES
+    // =========================================================
+
+    public class Facility : BaseEntity
+    {
+        [Required, MaxLength(200)]
+        public string Name { get; set; } = string.Empty;
+
+        public string? Description { get; set; }
+
+        [MaxLength(500)]
+        public string? ImagePath { get; set; }
+
+        [MaxLength(100)]
+        public string? IconKey { get; set; }
     }
 
 
@@ -372,10 +456,10 @@ namespace CGS.CMS.API.Models
         [Required]
         public string PasswordHash { get; set; } = string.Empty;
 
-        [MaxLength(150)]
+        [Required, MaxLength(150)]
         public string FullName { get; set; } = string.Empty;
 
-        [MaxLength(150)]
+        [MaxLength(150), EmailAddress]
         public string? Email { get; set; }
 
         [MaxLength(50)]

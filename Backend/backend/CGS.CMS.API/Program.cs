@@ -1,13 +1,56 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Threading.RateLimiting;
 using CGS.CMS.API.Data;
 using CGS.CMS.API.Services;
+using CGS.CMS.API.Filters;
+using CGS.CMS.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --- Database (SQL Server via EF Core) ---
+// --- Security: Rate Limiting ---
+builder.Services.AddRateLimiter(options =>
+{
+    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 100,
+                Window = TimeSpan.FromMinutes(1),
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = 10
+            }));
+
+    options.AddPolicy("Auth", context =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 10,
+                Window = TimeSpan.FromMinutes(1),
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = 2
+            }));
+
+    options.AddPolicy("Upload", context =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 20,
+                Window = TimeSpan.FromMinutes(1),
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = 5
+            }));
+
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+});
+
+// --- Database (PostgreSQL via EF Core) ---
 var configuredConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? builder.Configuration["DATABASE_URL"];
 if (string.IsNullOrWhiteSpace(configuredConnectionString))
@@ -24,7 +67,11 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<PermissionAuthorizationFilter>();
 
 // --- Controllers ---
-builder.Services.AddControllers(options => options.Filters.AddService<PermissionAuthorizationFilter>());
+builder.Services.AddControllers(options =>
+{
+    options.Filters.AddService<PermissionAuthorizationFilter>();
+    options.Filters.Add<ValidateModelAttribute>();
+});
 
 // --- Swagger ---
 builder.Services.AddEndpointsApiExplorer();
@@ -61,12 +108,16 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(allowedOrigins)
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 
 // --- JWT Authentication ---
 var jwtKey = builder.Configuration["Jwt:Key"]!;
+if (string.IsNullOrWhiteSpace(jwtKey) || jwtKey.Length < 32)
+    throw new InvalidOperationException("JWT Key must be at least 32 characters long.");
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -82,7 +133,8 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+        ClockSkew = TimeSpan.Zero
     };
 });
 
@@ -113,14 +165,36 @@ static string ToNpgsqlConnectionString(string value)
     return builder.ConnectionString;
 }
 
-// --- Create the initial schema in a fresh Supabase database ---
-using (var scope = app.Services.CreateScope())
+// --- Global Exception Handler ---
+app.UseGlobalExceptionHandler();
+
+// --- Security Headers ---
+app.Use(async (context, next) =>
 {
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    if (builder.Environment.IsDevelopment() ||
-        builder.Configuration.GetValue<bool>("Database:EnsureCreated"))
-        db.Database.EnsureCreated();
-}
+    context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+    context.Response.Headers["X-Frame-Options"] = "DENY";
+    context.Response.Headers["X-XSS-Protection"] = "1; mode=block";
+    context.Response.Headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
+    context.Response.Headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()";
+    await next();
+});
+
+// --- Apply migrations to the database ---
+    try
+    {
+        using (var scope = app.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+            var db = services.GetRequiredService<ApplicationDbContext>();
+            db.Database.Migrate();
+            app.Logger.LogInformation("Database migrations applied successfully.");
+        }
+    }
+    catch (Exception ex)
+    {
+        app.Logger.LogError(ex, "An error occurred applying database migrations.");
+        throw;
+    }
 
 if (app.Environment.IsDevelopment())
 {
@@ -129,6 +203,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowFrontend");
+app.UseRateLimiter();
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -19,6 +19,7 @@ import {
   getSlider,
   fileUrl,
   getSettings,
+  getNavigation,
 } from "../api/cmsApi";
 import "../Styles/HeroSection.css";
 import campusBackground from "../assets/pdf/Image-1769067088487.jpeg";
@@ -38,42 +39,6 @@ function isBannerImage(src) {
 
 
 /* =========================================================
-   NAVIGATION MENUS
-   ========================================================= */
-
-const menus = [
-  {
-    label: "ABOUT US",
-    items: [
-      ["About the School", "/about"],
-      ["Aim & Objective", "/aim-and-objective"],
-      ["Director's Message", "/director-message"],
-    ],
-  },
-
-  {
-    label: "ACADEMICS",
-    items: [
-      ["All Programmes", "/#programs"],
-      [
-        "Prospectus 2026-28",
-        "/assets/pdf/SGS Prospectus - 2026-28.pdf",
-      ],
-    ],
-  },
-
-  {
-    label: "FACULTY & STAFF",
-    items: [
-      ["Faculty", "/faculty"],
-      ["Guest Faculty / Staff", "/staff"],
-    ],
-  },
-
-];
-
-
-/* =========================================================
    HERO SECTION COMPONENT
    ========================================================= */
 
@@ -87,6 +52,9 @@ export default function HeroSection() {
 
   /* Database Site Settings */
   const [siteSettings, setSiteSettings] = useState(null);
+
+  /* Navigation from CMS */
+  const [navigation, setNavigation] = useState([]);
 
   /* Hero image */
   const [heroImages, setHeroImages] = useState([{ src: defaultHeroImage, title: 'School of Geography' }]);
@@ -167,6 +135,18 @@ export default function HeroSection() {
           error
         );
 
+      });
+
+    /* -------------------------------------------------------
+       LOAD NAVIGATION MENU
+       ------------------------------------------------------- */
+
+    getNavigation()
+      .then((data) => {
+        setNavigation(data || []);
+      })
+      .catch((error) => {
+        console.error("Navigation loading error:", error);
       });
 
   }, []);
@@ -348,7 +328,6 @@ export default function HeroSection() {
       </div>
 
 
-
       {/* =====================================================
           BRAND HEADER
           ===================================================== */}
@@ -393,7 +372,6 @@ export default function HeroSection() {
             </div>
 
           </Link>
-
 
 
           {/* =================================================
@@ -457,11 +435,9 @@ export default function HeroSection() {
           </Link>
 
 
-
         </div>
 
       </div>
-
 
 
       {/* =====================================================
@@ -505,142 +481,127 @@ export default function HeroSection() {
           </NavLink>
 
 
-
           {/* =================================================
-              DROPDOWN MENUS
+              DYNAMIC DROPDOWN MENUS FROM CMS
               ================================================= */}
 
-          {menus.map((menu) => (
+          {navigation
+            .filter(item => item.parentId === null || item.parentId === 0)
+            .map((menu) => {
+              const children = navigation
+                .filter(item => item.parentId === menu.id)
+                .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
 
-            <div
-              className="nav-menu"
-              key={menu.label}
-              onMouseEnter={() => setOpen(menu.label)}
-              onMouseLeave={() => setOpen(null)}
-            >
+              if (children.length === 0) {
+                // Top-level link without dropdown
+                return (
+                  <NavLink
+                    key={menu.id}
+                    to={menu.url || '#'}
+                    className="nav-link"
+                    target={menu.isExternal ? '_blank' : undefined}
+                    rel={menu.isExternal ? 'noreferrer' : undefined}
+                    onClick={() => setOpen(null)}
+                  >
+                    {menu.label}
+                  </NavLink>
+                );
+              }
 
-
-              <button
-                type="button"
-                className={
-                  `nav-link nav-menu-button ${
-                    open === menu.label
-                      ? "menu-open"
-                      : ""
-                  }`
-                }
-                onClick={() =>
-                  setOpen(
-                    open === menu.label
-                      ? null
-                      : menu.label
-                  )
-                }
-              >
-
-                {menu.label}
-
-                <FaChevronDown />
-
-              </button>
-
-
-              {/* Dropdown */}
-
-              {open === menu.label && (
-
-                <div className="dropdown-panel">
-
-                  {menu.items.map(
-                    ([label, href]) => {
-
-                      /* Anchor links */
-
-                      if (
-                        href.startsWith("/#")
-                      ) {
-
-                        return (
-
-                          <a
-                            key={label}
-                            href={href}
-                            onClick={() =>
-                              setOpen(null)
-                            }
-                          >
-                            {label}
-                          </a>
-
-                        );
-
-                      }
-
-
-                      /* PDF links */
-
-                      if (
-                        href.endsWith(".pdf")
-                      ) {
-
-                        return (
-
-                          <a
-                            key={label}
-                            href={href}
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            {label}
-                          </a>
-
-                        );
-
-                      }
-
-
-                      /* React routes */
-
-                      return (
-
-                        <Link
-                          key={label}
-                          to={href}
-                          onClick={() =>
-                            setOpen(null)
-                          }
-                        >
-                          {label}
-                        </Link>
-
-                      );
-
+              // Dropdown menu
+              return (
+                <div
+                  className="nav-menu"
+                  key={menu.id}
+                  onMouseEnter={() => setOpen(menu.id)}
+                  onMouseLeave={() => setOpen(null)}
+                >
+                  <button
+                    type="button"
+                    className={
+                      `nav-link nav-menu-button ${
+                        open === menu.id
+                          ? "menu-open"
+                          : ""
+                      }`
                     }
+                    onClick={() =>
+                      setOpen(
+                        open === menu.id
+                          ? null
+                          : menu.id
+                      )
+                    }
+                  >
+                    {menu.label}
+                    <FaChevronDown />
+                  </button>
+
+                  {open === menu.id && (
+                    <div className="dropdown-panel">
+                      {children.map((child) => {
+                        const isAnchor = child.url?.startsWith('/#');
+                        const isPdf = child.url?.endsWith('.pdf');
+                        const isExternal = child.isExternal;
+
+                        if (isAnchor) {
+                          return (
+                            <a
+                              key={child.id}
+                              href={child.url}
+                              onClick={() => setOpen(null)}
+                            >
+                              {child.label}
+                            </a>
+                          );
+                        }
+
+                        if (isPdf) {
+                          return (
+                            <a
+                              key={child.id}
+                              href={child.url}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              {child.label}
+                            </a>
+                          );
+                        }
+
+                        if (isExternal) {
+                          return (
+                            <a
+                              key={child.id}
+                              href={child.url}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              {child.label}
+                            </a>
+                          );
+                        }
+
+                        return (
+                          <Link
+                            key={child.id}
+                            to={child.url}
+                            onClick={() => setOpen(null)}
+                          >
+                            {child.label}
+                          </Link>
+                        );
+                      })}
+                    </div>
                   )}
-
                 </div>
-
-              )}
-
-            </div>
-
-          ))}
-
+              );
+            })}
 
 
           {/* =================================================
-              OTHER NAVIGATION
+              STATIC NAVIGATION LINKS (kept for essential links)
               ================================================= */}
-
-          <a
-            href="https://adms.akubihar.ac.in/"
-            target="_blank"
-            rel="noreferrer"
-            className="nav-link"
-          >
-            ADMISSION
-          </a>
-
 
           <NavLink
             to="/gallery"
@@ -675,7 +636,6 @@ export default function HeroSection() {
         </div>
 
       </nav>
-
 
 
       {/* =====================================================
@@ -760,7 +720,7 @@ export default function HeroSection() {
                 href="#research"
                 className="hero-secondary"
               >
-                Research &amp; Innovation
+                Research & Innovation
                 <span>›</span>
               </a>
 

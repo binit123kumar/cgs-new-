@@ -292,6 +292,83 @@ export const modules = {
       { key: 'status', label: 'Status' },
     ],
   },
+
+  navigation: {
+    key: 'navigation',
+    label: 'Navigation Menu',
+    icon: 'bi-list',
+    color: '#6366f1',
+    endpoint: '/navigation',
+    titleField: 'label',
+    imageField: null,
+    fields: [
+      { name: 'label', label: 'Label', type: 'text', required: true },
+      { name: 'url', label: 'URL', type: 'text', full: true, hint: 'Internal path (e.g. /about) or full https:// URL' },
+      { name: 'parentId', label: 'Parent Menu Item', type: 'number', hint: 'Leave empty for top-level menu items' },
+      { name: 'iconKey', label: 'Icon Key', type: 'text', hint: 'Bootstrap icon name (e.g. bi-house, bi-book)' },
+      { name: 'isExternal', label: 'External Link', type: 'checkbox', default: false, full: true },
+      { name: 'openInNewTab', label: 'Open in New Tab', type: 'checkbox', default: false, full: true },
+      { name: 'displayOrder', label: 'Display Order', type: 'number', default: 1 },
+      { name: 'isActive', label: 'Active', type: 'checkbox', default: true },
+    ],
+    columns: [
+      { key: 'label', label: 'Label' },
+      { key: 'url', label: 'URL' },
+      { key: 'parentId', label: 'Parent' },
+      { key: 'displayOrder', label: 'Order' },
+      { key: 'status', label: 'Status' },
+    ],
+  },
+
+  footerlinks: {
+    key: 'footerlinks',
+    label: 'Footer Links',
+    icon: 'bi-link-45deg',
+    color: '#8b5cf6',
+    endpoint: '/footerlinks',
+    titleField: 'label',
+    imageField: null,
+    fields: [
+      { name: 'label', label: 'Label', type: 'text', required: true },
+      { name: 'url', label: 'URL', type: 'text', full: true, hint: 'Internal path (e.g. /about) or full https:// URL' },
+      { name: 'section', label: 'Section', type: 'text', required: true, hint: 'Section name: Quick Links, Important Links, Student Corner, Follow Us' },
+      { name: 'isExternal', label: 'External Link', type: 'checkbox', default: false, full: true },
+      { name: 'openInNewTab', label: 'Open in New Tab', type: 'checkbox', default: false, full: true },
+      { name: 'displayOrder', label: 'Display Order', type: 'number', default: 1 },
+      { name: 'isActive', label: 'Active', type: 'checkbox', default: true },
+    ],
+    columns: [
+      { key: 'label', label: 'Label' },
+      { key: 'url', label: 'URL' },
+      { key: 'section', label: 'Section' },
+      { key: 'displayOrder', label: 'Order' },
+      { key: 'status', label: 'Status' },
+    ],
+  },
+
+  facilities: {
+    key: 'facilities',
+    label: 'Infrastructure / Facilities',
+    icon: 'bi-building',
+    color: '#0d9488',
+    endpoint: '/facilities',
+    titleField: 'name',
+    imageField: 'imagePath',
+    fields: [
+      { name: 'name', label: 'Name', type: 'text', required: true },
+      { name: 'description', label: 'Description', type: 'textarea', full: true },
+      { name: 'iconKey', label: 'Icon Key', type: 'text', hint: 'Bootstrap icon name (e.g. bi-pc-display, bi-book)' },
+      { name: 'displayOrder', label: 'Display Order', type: 'number', default: 1 },
+      { name: 'isActive', label: 'Active', type: 'checkbox', default: true },
+      { name: 'image', label: 'Image', type: 'file', image: true, hint: 'Recommended size: 800x600' },
+    ],
+    columns: [
+      { key: 'thumb', label: 'Image' },
+      { key: 'name', label: 'Name' },
+      { key: 'displayOrder', label: 'Order' },
+      { key: 'status', label: 'Status' },
+    ],
+  },
 };
 
 export const moduleList = Object.values(modules);

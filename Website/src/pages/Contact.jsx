@@ -8,15 +8,29 @@
 
 import React, { useEffect, useState } from 'react';
 import { getSettings } from '../api/cmsApi';
+import { LoadingSpinner, ErrorState } from '../components/DataState';
 import '../Styles/Contact.css';
 
 function Contact() {
   const [settings, setSettings] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchSettings = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getSettings();
+      setSettings(data);
+    } catch (err) {
+      setError(err.message || 'Failed to load contact details');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    getSettings()
-      .then(setSettings)
-      .catch(() => setSettings(null));
+    fetchSettings();
   }, []);
 
   const siteName = settings?.siteName || settings?.SiteName || 'School of Geography';
@@ -26,6 +40,22 @@ function Contact() {
     'Aryabhatta Knowledge University Campus, Mithapur, Patna - 800001, Bihar (India)';
   const phone = settings?.phone || settings?.Phone || '+91 612 235 0000';
   const email = settings?.email || settings?.Email || 'geography@aku.ac.in';
+
+  if (loading) {
+    return (
+      <div className="Contact-page" style={{ textAlign: 'center', padding: '40px' }}>
+        <LoadingSpinner size="md" message="Loading contact details..." />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="Contact-page" style={{ textAlign: 'center', padding: '40px' }}>
+        <ErrorState message={error} onRetry={fetchSettings} />
+      </div>
+    );
+  }
 
   return (
     <div className="Contact-page">
